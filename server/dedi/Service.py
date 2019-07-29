@@ -26,6 +26,8 @@ class Service:
         logging.basicConfig()        
         self.zk = KazooClient(hosts=Env.ZOOKEEPER_IP + ":" + Env.ZOOKEEPER_PORT)
         self.app = Flask(__name__)
+
+        self.name = Env.HOST_IP + ":" + Env.HOST_PORT
         
     
     def zk_session_handler(self, state):
@@ -45,8 +47,8 @@ class Service:
         if self.state == State.READY:
             self.state = State.RUN
 
-            self.zk.delete("/ready/" + Env.HOST_IP)
-            self.zk.create("/run/" + Env.HOST_IP, self.state.name.encode(), ephemeral=True)
+            self.zk.delete("/waiting/" + self.name)
+            self.zk.create("/running/" + self.name, self.state.name.encode(), ephemeral=True)
 
             t = threading.Timer(10, self.stop)
             t.start()
@@ -61,10 +63,10 @@ class Service:
             self.zk.add_listener(self.zk_session_handler)
             self.zk.start()
             
-            self.zk.ensure_path("/ready/")
-            self.zk.ensure_path("/run/")
+            self.zk.ensure_path("/waiting/")
+            self.zk.ensure_path("/running/")
             
-            self.zk.create("/ready/" + Env.HOST_IP, self.state.name.encode(), ephemeral=True)
+            self.zk.create("/waiting/" + self.name, self.state.name.encode(), ephemeral=True)
 
             import Router
 

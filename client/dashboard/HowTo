@@ -1,0 +1,10 @@
+npm 5.x 에서
+
+$ npx create-react-app my-app --typescript
+$ npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+
+테스트
+$ npm start
+
+
+$ npm run build
