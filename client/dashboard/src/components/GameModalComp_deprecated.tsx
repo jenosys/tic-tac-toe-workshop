@@ -5,7 +5,7 @@ interface State {
   active: boolean
 }
 
-class ModalExample extends React.Component<{}, State> {
+class ModalExampleX extends React.Component<{}, State> {
   state: State = {
     active: true,
   };

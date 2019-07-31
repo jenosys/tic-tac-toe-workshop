@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
 import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
+import ServerList from '../components/ServerList';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -22,13 +23,20 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default withRouter(function MonitoringPage() {
+interface Props {
+  servers: ServerStore[]
+}
+
+export default function ServerPage({ servers }: Props) {  
   const classes = useStyles();
+  const idleServers = servers.filter(s => s.state === 'READY');
+  const busyServers = servers.filter(s => s.state === 'BUSY');
+
   
   return (
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
+        {/* <Typography paragraph>
           Monitoring Page
           
         </Typography>
@@ -42,7 +50,16 @@ export default withRouter(function MonitoringPage() {
           tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
           nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
           accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        </Typography> */}
+        <ServerList key='active' name={'Active'} servers={busyServers}/>
+        <ServerList key='idle' name={'Idle'} servers={idleServers}/>
+        {
+          // server.map(s => (
+          //   <Typography paragraph>
+          //     server address: {s.serverid} state: {s.state}
+          //   </Typography>            
+          // ))
+        }
       </main>
   );
-});
+}

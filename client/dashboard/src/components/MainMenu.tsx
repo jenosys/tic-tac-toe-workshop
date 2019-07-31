@@ -1,27 +1,27 @@
-import React from 'react';
-import clsx from 'clsx';
-import { withRouter } from 'react-router-dom'
-import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import { Badge, FormControlLabel, FormGroup, MenuItem, Switch } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Menu from '@material-ui/core/Menu';
+import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Grade from '@material-ui/icons/Grade';
+import MenuIcon from '@material-ui/icons/Menu';
 import Timeline from '@material-ui/icons/Timeline';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
-import Grade from '@material-ui/icons/Grade';
-import { FormGroup, FormControlLabel, Switch, MenuItem, Badge, Link } from '@material-ui/core';
-import Menu from '@material-ui/core/Menu';
+import clsx from 'clsx';
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -99,10 +99,10 @@ export default withRouter(function MainMenu(props: any) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(true);
-  const [auth, setAuth] = React.useState(true);
+  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const accountOpen = Boolean(anchorEl);
-  const { history } = props;
+  const { history, auth, userCount, serverCount } = props;
 
   function handleDrawerOpen() {
     setDrawerOpen(true);
@@ -112,9 +112,9 @@ export default withRouter(function MainMenu(props: any) {
     setDrawerOpen(false);
   }
 
-  function handleAuthChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setAuth(event.target.checked);
-  }
+  // function handleAuthChange(event: React.ChangeEvent<HTMLInputElement>) {
+  //   setAuth(event.target.checked);
+  // }
 
   function handleMenu(event: React.MouseEvent<HTMLElement>) {
     setAnchorEl(event.currentTarget);
@@ -128,12 +128,12 @@ export default withRouter(function MainMenu(props: any) {
     // <div className={classes.root}>
     <div>
       <CssBaseline />
-      <FormGroup>
+      {/* <FormGroup>
         <FormControlLabel
           control={<Switch checked={auth} onChange={handleAuthChange} aria-label="login switch" />}
           label={auth ? 'Logout' : 'Login'}
         />
-      </FormGroup>
+      </FormGroup> */}
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
@@ -211,16 +211,16 @@ export default withRouter(function MainMenu(props: any) {
         <List>
           <ListItem button key={'Games'} onClick={() => history.push('/game')}>
             <ListItemIcon>
-              <Badge className={classes.margin} badgeContent={4} max={99} color="primary">
+              <Badge className={classes.margin} showZero badgeContent={userCount} max={99} color="primary">
                 <VideogameAsset />
               </Badge>
             </ListItemIcon>
             <ListItemText primary={'게임'} />
           </ListItem>
 
-          <ListItem button key={'TrendingUp'} onClick={() => history.push('/monitoring')}>
+          <ListItem button key={'TrendingUp'} onClick={() => history.push('/server')}>
             <ListItemIcon>
-              <Badge className={classes.margin} badgeContent={4} max={99} color="primary">
+              <Badge className={classes.margin} showZero badgeContent={serverCount} max={99} color="primary">
                 <Timeline />
               </Badge>
             </ListItemIcon>
