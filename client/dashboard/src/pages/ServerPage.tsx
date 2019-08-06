@@ -1,6 +1,5 @@
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
-import { withRouter } from 'react-router-dom'
-import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core';
 import ServerList from '../components/ServerList';
 
 

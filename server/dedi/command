@@ -1,0 +1,1 @@
+curl ${ECS_CONTAINER_METADATA_URI}/task | jq '.Containers[] | select(.Name == "dedicade-server") | .Ports[] | select(.ContainerPort == 8888) | .HostPort'

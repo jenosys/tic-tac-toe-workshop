@@ -4,6 +4,8 @@ import assert from 'assert';
 
 let localIP = internalIp.v4.sync();
 
+console.log(localIP);
+
 const ENV = {
     VERSION: "0.0.1",
     LOCALIP: localIP,

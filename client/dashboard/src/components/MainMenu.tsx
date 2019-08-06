@@ -1,4 +1,4 @@
-import { Badge, FormControlLabel, FormGroup, MenuItem, Switch } from '@material-ui/core';
+import { Badge, MenuItem } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';

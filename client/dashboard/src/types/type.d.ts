@@ -7,11 +7,11 @@ interface AuthActionType extends ActionBase {
 }
 
 interface UserActionType extends ActionBase {
-  type: "user/ADD" | "user/REMOVE"
+  type: 'user/ADD' | 'user/REMOVE' | 'users/REPLACE'
 }
 
 interface ServerActionType extends ActionBase {
-  type: "server/ADD" | "server/UPDATE" | "server/REMOVE"
+  type: 'server/ADD' | 'server/UPDATE' | 'server/REMOVE' | 'servers/REPLACE'
 }
 
 interface StoreBase {}
@@ -36,8 +36,10 @@ interface RootStore {
   servers: ServerStore[]
 };
 
-type Action<Type extends ActionBase, Store extends StoreBase> = Type & Partial<Store>;
+type SingleAction<Type extends ActionBase, Store extends StoreBase> = Type & Partial<Store>;
+type GroupAction<Type extends ActionBase, Store extends StoreBase> = Type & Store[];
 
-type AuthAction = Action<AuthActionType, AuthStore>;
-type UserAction = Action<UserActionType, UserStore>;
+
+type AuthAction = SingleAction<AuthActionType, AuthStore>;
+type UserAction = Action<UserActionType, UserStore> | GroupAction<UserActionType, UserStore>;
 type ServerAction = Action<ServerActionType, ServerStore>;

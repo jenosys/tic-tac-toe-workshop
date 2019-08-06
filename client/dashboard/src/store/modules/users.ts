@@ -12,10 +12,19 @@ export const addUser = (username: UserStore['username'], score: UserStore['score
     username
   });
 
+  export const replaceUsers = (users: UserStore[]): UserAction => 
+  ({
+    type: 'users/REPLACE',
+    users
+  });
+
   const initialState: UserStore[] = [];
 
   export default function users(state = initialState, action: UserAction) {
     switch (action.type) {
+      case 'users/REPLACE':
+        return action.users;
+
       case "user/ADD":
         return state.find(u => u.username === action.username)
           ? state
