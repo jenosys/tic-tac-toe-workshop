@@ -15,7 +15,7 @@ interface User {
 	name?: string;
 	score: number;
 	socket: socketIO.Socket;
-};
+}
 
 interface Server {
 	addr: string;
@@ -113,7 +113,7 @@ class App {
 
 		this.io.on('connect', socket => {
 			console.log(socket);
-		})
+		});
 		this.io.on('connection', socket => {
 			this.users.push({
 				name: 'testtest',
@@ -195,8 +195,8 @@ class App {
 
 			this.servers = readies.concat(busies);
 
-			console.log(this.users.map(u => { u.name, u.score }));
-			this.io.emit('users', this.users.map(u => { u.name, u.score }));
+			console.log(this.users.map(u => { u.name, u.score; }));
+			this.io.emit('users', this.users.map(u => { u.name, u.score; }));
 			this.io.emit('serverList', this.servers);
 		} catch (e) {
 			console.log(e);

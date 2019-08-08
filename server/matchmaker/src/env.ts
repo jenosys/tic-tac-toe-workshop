@@ -25,6 +25,6 @@ const ENV = {
         assert.ok(!!ENV.AWS_ACCESS_KEY_ID,      "AWS_ACCESS_KEY_ID must be set");
         assert.ok(!!ENV.AWS_SECRET_ACCESS_KEY,  "AWS_SECRET_ACCESS_KEY must be set");
     }
-}
+};
 
 export default ENV;

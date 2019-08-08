@@ -1,0 +1,4 @@
+# build docker image
+docker build -t tic-tac-toe .
+
+

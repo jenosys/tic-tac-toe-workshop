@@ -94,7 +94,8 @@ export default class EndGameScreen extends PIXI.Container {
   }
 
   closeMe() {
-    window.parent.closeMe();
+    // window.parent && window.parent.closeMe();
+    window.parent.postMessage('closeMe', '*');
   }
 
   onResize() {

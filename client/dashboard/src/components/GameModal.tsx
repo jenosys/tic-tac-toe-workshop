@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Iframe from 'react-iframe';
 
 const styles = (theme: Theme) =>
@@ -53,9 +53,23 @@ export interface SimpleDialogProps {
 function SimpleDialog(props: SimpleDialogProps) {
   const { onClose, open } = props;
 
+  useEffect(() => {
+    let closeMe = (event: MessageEvent) => { 
+      if (event.data === 'closeMe') {
+        handleClose();
+      }
+    }
+    window.addEventListener('message', closeMe);
+
+    return () => {
+      window.removeEventListener('message', closeMe);
+    }
+  }, []);
+
   function handleClose() {
     onClose();
   }
+
 
   return (
     <Dialog
@@ -69,24 +83,24 @@ function SimpleDialog(props: SimpleDialogProps) {
     >
       <DialogTitle id="simple-dialog-title" onClose={handleClose} >Tic Tac Toe</DialogTitle>
       <Box width="100%" height={550} bgcolor="text.primary" position='relative'>
-      <div style={{ zoom: 0.6 }}>
-        <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
-          <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-            <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+        <div style={{ zoom: 0.6 }}>
+          <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
+            <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+              <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
 
-              <Grid container justify="center" alignItems="center">
-                <Iframe
-                  // url="https://www.youtube.com/embed/Wb-0prPgt1o"
-                  // url="http://tictactoe-colyseus.herokuapp.com/"
-                  url="http://localhost:8080/"
-                  width="600px"
-                  height="800px"
-                  frameBorder={0}
-                  scrolling="no"
-                />
-              </Grid>
+                <Grid container justify="center" alignItems="center">
+                  <Iframe
+                    // url="https://www.youtube.com/embed/Wb-0prPgt1o"
+                    // url={`http://localhost:8080/?hostname=${"13.124.158.138"}%3A${32795}`}
+                    url={`http://localhost:8080/`}
+                    width="600px"
+                    height="800px"
+                    frameBorder={0}
+                    scrolling="no"
+                  />
+                </Grid>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </Box>

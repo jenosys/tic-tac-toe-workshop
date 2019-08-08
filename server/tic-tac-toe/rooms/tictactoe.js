@@ -1,4 +1,5 @@
 const Room = require('colyseus').Room;
+const discovery = require('../discovery');
 
 const TURN_TIMEOUT = 10
 
@@ -27,6 +28,8 @@ module.exports = class TicTacToe extends Room {
       // lock this room for new users
       this.lock();
     }
+
+    discovery.update('Busy');
 
     console.log('onJoin. player: ' + JSON.stringify(this.state.players[client.sessionId]));
   }
