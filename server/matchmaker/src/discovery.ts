@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import axios from 'axios';
+import interval from 'interval-promise';
 
 interface DediServer {
   id: string;
@@ -67,7 +68,9 @@ class Discovery {
 
     this.svcId = svc.Id!;
 
-    setInterval(() => this.refresh(), 5000);
+    interval(async () => {
+      await this.refresh();
+    }, 5000);
   }
 
   async refresh() {
@@ -113,6 +116,10 @@ class Discovery {
             this.sd.deregisterInstance({
               InstanceId: srv.id,
               ServiceId: this.svcId
+            }, (err, data) => {
+              if (err) {
+                console.log(err, err.stack);
+              }
             });
 
             console.log(`dedi server(${srv.id}, ${srv.ipv4}:${srv.port}) doesn't respond`);

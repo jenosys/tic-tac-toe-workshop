@@ -1,7 +1,4 @@
-############################################
-# Dockerfile to build hello microservice
-# Based on python dockerhub image
-############################################
+# Tic-tac-toe 데디케이티드 서버를 컨테이너로 묶는 설정 파일
 
 # Set base image to python
 FROM node:12.7
@@ -24,5 +21,5 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 
-CMD [ "npm", "run", "start-production" ]
+CMD ["node", "build/index.js"]
 ENTRYPOINT [ "/app/entrypoint.sh" ]

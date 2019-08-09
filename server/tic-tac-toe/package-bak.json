@@ -2,29 +2,23 @@
   "name": "colyseus-starter",
   "version": "1.0.0",
   "description": "Colyseus Server - Minimal example",
-  "main": "build/index.js",
+  "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
-    "start": "node .",
-    "start-production": "NODE_ENV=production node .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --exec babel-node ./index.js",
+    "start-production": "NODE_ENV=production babel-node ./index.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@types/express": "^4.17.0",
     "aws-sdk": "^2.505.0",
-    "capture-exit": "^2.0.0",
     "colyseus": "^0.9.3",
     "cors": "^2.8.5",
     "express": "^4.13.4",
     "nocache": "^2.1.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.5",
-    "@types/redis": "^2.8.13",
     "nodemon": "^1.17.3",
+    "tslint": "^5.18.0",
     "typescript": "^3.5.3"
   }
 }
