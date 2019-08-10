@@ -1,30 +1,42 @@
-import AWS from 'aws-sdk';
 import axios from 'axios';
 import interval from 'interval-promise';
 
-interface DediServer {
+import AWS from './aws';
+
+
+export interface DediServer {
   id: string;
   ipv4: string;
   port: number;
-  state: string;
+  state: 'ready' | 'bind' | 'busy';
+  taskArn: string;
 }
 
 const NAMESPACE_NAME = 'tic-tac-toe';
 const SERVICE_NAME = 'dedi-servers';
 
-let credentials = new AWS.SharedIniFileCredentials({profile: 'container'});
-AWS.config.credentials = credentials;
-AWS.config.update({region: 'ap-northeast-2'});
 
 class Discovery {
   private sd: AWS.ServiceDiscovery;
   private nsId: string;
   private svcId: string;
 
-  servers: DediServer[] = [];
+  private _servers: DediServer[] = [];
 
   constructor() {
     this.sd = new AWS.ServiceDiscovery({ apiVersion: '2017-03-14' });
+  }
+
+  get servers() {
+    return this._servers.slice(0);
+  }
+
+  get readyCount() {
+    return this._servers.filter(srv => srv.state === 'ready').length;
+  }
+
+  get busyCount() {
+    return this._servers.filter(srv => srv.state === 'busy').length;
   }
 
   async init() {
@@ -68,6 +80,8 @@ class Discovery {
 
     this.svcId = svc.Id!;
 
+    await this.refresh();
+
     interval(async () => {
       await this.refresh();
     }, 5000);
@@ -91,17 +105,16 @@ class Discovery {
             id: ins.Id!,
             ipv4: ins.Attributes!.AWS_INSTANCE_IPV4,
             port: parseInt(ins.Attributes!.AWS_INSTANCE_PORT),
-            state: ins.Attributes!.State || 'Not set'
+            state: ins.Attributes!.STATE as DediServer['state'] || 'ready',
+            taskArn: ins.Attributes!.TASK_ARN
           });
         });
 
       } while (nextToken);
 
     } catch (e) {
-      console.error('error ', e);
+      console.error(e);
     }
-
-    console.log(array);
 
     let mixedArray = await Promise.all(
       array.map(srv => new Promise<DediServer | undefined>(resolve => {
@@ -127,9 +140,9 @@ class Discovery {
       }))
     );
 
-    this.servers = mixedArray.filter(elem => !!elem) as DediServer[];
+    this._servers = mixedArray.filter(elem => !!elem) as DediServer[];
 
-    console.log(JSON.stringify(this.servers));
+    console.log(this._servers);
   }
 }
 

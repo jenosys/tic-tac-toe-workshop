@@ -28,8 +28,8 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
   onClose: () => void;
 }
 
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-  const { children, classes, onClose } = props;
+const DialogTitle = withStyles(styles)(({ children, classes, onClose }: DialogTitleProps) => {
+  
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
       <Typography variant="h6">{children}</Typography>

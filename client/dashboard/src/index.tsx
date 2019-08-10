@@ -41,12 +41,12 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const simulation = true;
+const simulation = false;
 
 if (simulation) {
   setInterval(() => {
     Math.random() > 0.4 && store.dispatch(addUser(makeid(7), getRandomInt(100, 1000)));
-    store.getState().servers.filter(s => s.state === 'READY').length < 10 && store.dispatch(addServer(`57.31.126.${getRandomInt(122,125)}:` + getRandomInt(1000, 65535)));
+    store.getState().servers.filter(s => s.state === 'ready').length < 10 && store.dispatch(addServer(`57.31.126.${getRandomInt(122,125)}:` + getRandomInt(1000, 65535)));
   }, 1000);
 
   setTimeout(() => {
@@ -57,13 +57,13 @@ if (simulation) {
         store.dispatch(removeUser(users[idx].username));
       }
 
-      let servers = store.getState().servers.filter(s => s.state === 'READY');
+      let servers = store.getState().servers.filter(s => s.state === 'ready');
       if (Math.random() > 0.4) {
         let server = servers[getRandomInt(0, servers.length - 1)];
-        store.dispatch(updateServer(server.addr, 'BUSY'));
+        store.dispatch(updateServer(server.addr, 'busy'));
       }
 
-      servers = store.getState().servers.filter(s => s.state === 'BUSY');
+      servers = store.getState().servers.filter(s => s.state === 'busy');
       if (servers.length > 4 &&  Math.random() > 0.3) {
         let server = servers[getRandomInt(0, servers.length - 1)];
         store.dispatch(removeServer(server.addr));

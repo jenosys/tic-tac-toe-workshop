@@ -1,14 +1,15 @@
-import ECS from 'aws-sdk/clients/ecs';
 import * as bodyParser from 'body-parser';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import HTTP_STATUS_CODES from 'http-status-enum';
 import nocache from 'nocache';
-import * as zookeeper from 'node-zookeeper-client';
 import socketIO from 'socket.io';
 import { setInterval } from 'timers';
-import env from './env';
+import moment from 'moment';
+import discovery from './discovery';
+import containerManager from './containerManager'; import { resolve } from 'url';
+
 
 
 interface User {
@@ -17,16 +18,28 @@ interface User {
 	socket: socketIO.Socket;
 }
 
+interface User2 {
+	username: string;
+	score: number;
+}
+
 interface Server {
 	addr: string;
-	state: 'READY' | 'BUSY';
+	state: 'ready' | 'busy';
+}
+
+interface Var {
+	idleServerNumber: number;
+}
+
+interface Sendable {
+	users: User2[];
+	servers: Server[];
 }
 
 class App {
 	app: express.Application;
 
-	private zk: zookeeper.Client;
-	private ecs: ECS;
 	private router: express.Router;
 	private server: http.Server;
 	private io: SocketIO.Server;
@@ -34,27 +47,26 @@ class App {
 	private timedJob: NodeJS.Timeout;
 
 	private users: User[] = [];
-	private servers: Server[] = [];
+	private vars: Var = {
+		idleServerNumber: 10
+	};
+	private sendableData: Sendable = {
+		users: [],
+		servers: []
+	};
+	private nextAskTime: number = 0;
 
-
-	constructor() { }
 
 
 	public async init() {
 		this.app = express();
-
-		this.zk = zookeeper.createClient(env.ZOOKEEPER_ENDPOINT, {
-			sessionTimeout: 3000,
-			retries: 2
-		});
-		this.ecs = new ECS({ endpoint: env.ECS_CLUSTER_ENDPOINT });
 
 		this.app.use(cors());
 		this.app.use(nocache());
 		this.app.use(bodyParser.json());
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use((req, res, next) => {
-			console.log(req.url);
+			console.log(`${req.method} ${req.originalUrl}`);
 			next();
 		});
 
@@ -62,27 +74,27 @@ class App {
 		this.server = http.createServer(this.app);
 		this.router = express.Router();
 		this.io = socketIO(this.server);
-
 	}
 
-	public async run(host: string, port: number) {
-		let promise = new Promise((resolve, reject) => {
-			this.zk.once('connected', () => {
-				console.log('zookeeper connected');
-				resolve();
-			});
-		});
-		this.zk.connect();
-		await promise;
-		this.zk.mkdirp("/waiting", (e, path) => { });
-		this.zk.mkdirp("/running", (e, path) => { });
-
-		// this.server = this.app.listen(port, host);
+	public run(host: string, port: number) {
 		this.server.listen(port, host);
 
-		this.timedJob = setInterval(() => this.onTime(), 1000);
+		console.log(`server listen on ${host}:${port}`);
 
-		console.log(`server is listening on ${host}:${port}`);
+		this.vars.idleServerNumber = discovery.readyCount;
+
+		this.timedJob = setInterval(() => {
+			let now = moment().unix();
+
+			this.broadcast();
+
+			if (discovery.readyCount < this.vars.idleServerNumber && this.nextAskTime < now) {
+				containerManager.ensureReadyTaskNumber(this.vars.idleServerNumber);
+				this.nextAskTime = moment.unix(now).add(2, 'minutes').unix();
+			} else if (this.nextAskTime && discovery.readyCount >= this.vars.idleServerNumber) {
+				this.nextAskTime = 0;
+			}
+		}, 1000);
 	}
 
 	private wrap(fn: (req: express.Request) => Promise<any>): express.RequestHandler {
@@ -106,22 +118,18 @@ class App {
 		let router = this.router;
 
 		router.get('/', this.wrap(this.onHealthCheck));
-		// router.get('/dedi/all', this.wrap(this.onGetAllDedis));
-		router.get('/dedi/run', this.wrap(this.onRunDedis));
+		router.post('/idleServerCount', this.wrap(this.idleServerCount));
 
 		this.app.use(router);
 
-		this.io.on('connect', socket => {
-			console.log(socket);
-		});
-		this.io.on('connection', socket => {
+		this.io.sockets.on('connection', socket => {
 			this.users.push({
 				name: 'testtest',
 				score: 1123,
 				socket
 			});
 
-			console.log(`new connection: ${socket} total user count: ${this.users.length}`);
+			console.log(`new connection. socket(${socket.id}) total user count: ${this.users.length}`);
 
 			socket.on('disconnect', () => {
 				let idx = this.users.findIndex(u => u.socket === socket);
@@ -130,121 +138,66 @@ class App {
 					this.users.splice(idx, 1);
 				}
 
-				console.log(`disconnection: ${socket} total user count: ${this.users.length}`);
+				console.log(`disconnection: socket(${socket.id}) total user count: ${this.users.length}`);
 			});
+
+			this.io.emit('users', this.sendableData.users);
+			this.io.emit('servers', this.sendableData.servers);
+			this.io.emit('vars', this.vars);
+
+			console.log("@@@@@@@@@@@@@@");
 		});
+
 	}
 
 
 
 
 
-	public async shutdown() {
-		return new Promise((resolve, reject) => {
-			this.server.close(err => {
-				if (err) {
-					console.log('http server closing fail');
-					reject(err);
-				} else {
-					console.log('http server closed');
-					resolve();
-				}
-			});
-		});
-	}
-
-
-	private async runTask(number: number) {
-		return await this.ecs.runTask({
-			taskDefinition: env.ECS_TASK_DEFINITION,
-			count: number
-		}).promise();
-	}
-
-	private async onTime() {
+	private broadcast() {
 		try {
-		let p1 = await new Promise<string[]>((resolve, reject) => {
-			this.zk.getChildren("/waiting", (e, children: string[], stat: zookeeper.Stat) => {
-				if (e) {
-					reject(e);
-				} else {
-					resolve(children);
-				}
+			this.sendableData.users = this.users.map(u => {
+				return {
+					username: u.name,
+					score: u.score
+				} as User2;
 			});
-		});
-
-		let p2 = await new Promise<string[]>((resolve, reject) => {
-			this.zk.getChildren("/running", (e, children: string[]) => {
-				if (e) {
-					reject(e);
-				} else {
-					resolve(children);
-				}
+			this.sendableData.servers = discovery.servers.map(srv => {
+				return {
+					addr: `${srv.ipv4}:${srv.port}`,
+					state: srv.state
+				} as Server;
 			});
-		});
 
-			let readies = p1.map<Server>(entity => ({
-				addr: entity,
-				state: 'READY'
-			}));
-
-			let busies = p2.map<Server>(entity => ({
-				addr: entity,
-				state: 'BUSY'
-			}));
-
-			this.servers = readies.concat(busies);
-
-			console.log(this.users.map(u => { u.name, u.score; }));
-			this.io.emit('users', this.users.map(u => { u.name, u.score; }));
-			this.io.emit('serverList', this.servers);
+			this.io.emit('users', this.sendableData.users);
+			this.io.emit('servers', this.sendableData.servers);
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	}
-
 
 
 
 	private async onHealthCheck(req: express.Request) {
-		return env.VERSION;
+		return HTTP_STATUS_CODES.OK;
 	}
 
-	private async onRunDedis(req: express.Request) {
-		let response = await this.runTask(10);
+	private async idleServerCount(req: express.Request) {
+		const { number } = req.body;
+		if (this.vars.idleServerNumber === number) { return; }
 
-		if (response.failures) {
-			console.error(response.$response.error);
-			return response.failures;
-		} else {
-			console.log("runTask success");
-			return {};
+		let promise = containerManager.ensureReadyTaskNumber(number) as Promise<any>;
+
+		if (promise) {
+			promise.then(() => {
+				this.vars.idleServerNumber = number;
+				this.io.emit('vars', this.vars);
+			});
 		}
+
+		return HTTP_STATUS_CODES.OK;
 	}
 
-	// private async onGetAllDedis(req: express.Request) {
-	// let waiting = await new Promise<string[]>((resolve, reject) => {
-	// 	this.zk.getChildren("/waiting", (e, children: string[], stat: zookeeper.Stat) => {
-	// 		if (e) {
-	// 			reject(e);
-	// 		} else {
-	// 			resolve(children);
-	// 		}
-	// 	});
-	// });
-
-	// let running = await new Promise<string[]>((resolve, reject) => {
-	// 	this.zk.getChildren("/running", (e, children: string[]) => {
-	// 		if (e) {
-	// 			reject(e);
-	// 		} else {
-	// 			resolve(children);
-	// 		}
-	// 	});
-	// });
-
-	// return { waiting: waiting, run: running };
-	// }
 }
 
 

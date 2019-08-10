@@ -1,30 +1,34 @@
-import internalIp from 'internal-ip';
-
 import assert from 'assert';
 
-let localIP = internalIp.v4.sync();
 
-console.log(localIP);
+interface Env {
+    NODE_ENV: 'production' | 'development';
+    IS_IN_ECS: boolean;
 
-const ENV = {
-    VERSION: "0.0.1",
-    LOCALIP: localIP,
-    PRODUCTION: process.env.NODE_ENV === 'production',
+    AWS_REGION: string;
+    AWS_ACCESS_KEY_ID?: string;
+    AWS_SECRET_ACCESS_KEY?: string;
 
-    ECS_CLUSTER_ENDPOINT: process.env.ECS_CLUSTER_ENDPOINT!,                            //
-    ECS_TASK_DEFINITION: process.env.ECS_TASK_DEFINITION!,                              // external-ip:8
+    ECS_CLUSTER_NAME: string;
+    ECS_TASK_DEFINITION: string;
 
-    ZOOKEEPER_ENDPOINT: process.env.ZOOKEEPER_ENDPOINT || localIP + ":2181",            // 
+    validate: () => void;
+}
 
-    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID!,
-    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY!,
+const env: Env = {
+    NODE_ENV: (process.env.NODE_ENV || 'development') as Env['NODE_ENV'],
+    IS_IN_ECS: !!process.env.ECS_CONTAINER_METADATA_URI,
+    AWS_REGION: process.env.AWS_REGION || 'ap-northeast-2',
 
+    ECS_CLUSTER_NAME: process.env.ECS_CLUSTER_NAME || 'dedi-server-cluster',
+    ECS_TASK_DEFINITION: process.env.ECS_TASK_DEFINITION || 'tic-tac-toe:8',
+    
     validate: function() {
-        assert.ok(!!ENV.ECS_CLUSTER_ENDPOINT,   "ECS_CLUSTER_ENDPOINT must be set");
-        assert.ok(!!ENV.ECS_TASK_DEFINITION,    "ECS_TASK_DEFINITION must be set");
-        assert.ok(!!ENV.AWS_ACCESS_KEY_ID,      "AWS_ACCESS_KEY_ID must be set");
-        assert.ok(!!ENV.AWS_SECRET_ACCESS_KEY,  "AWS_SECRET_ACCESS_KEY must be set");
+        // assert.ok(!!env.ECS_CLUSTER_ENDPOINT,   "ECS_CLUSTER_ENDPOINT must be set");
+        assert.ok(!!env.ECS_TASK_DEFINITION,    "ECS_TASK_DEFINITION must be set");
+        // assert.ok(!!env.AWS_ACCESS_KEY_ID,      "AWS_ACCESS_KEY_ID must be set");
+        // assert.ok(!!env.AWS_SECRET_ACCESS_KEY,  "AWS_SECRET_ACCESS_KEY must be set");
     }
 };
 
-export default ENV;
+export default env;

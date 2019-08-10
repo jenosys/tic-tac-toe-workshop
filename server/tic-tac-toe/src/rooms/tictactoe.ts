@@ -33,7 +33,7 @@ export class TicTacToe extends Room {
       // lock this room for new users
       this.lock();
 
-      discovery.updateState('Busy');
+      discovery.updateState('busy');
     }
 
     console.log('onJoin. player: ' + JSON.stringify(this.state.players[client.sessionId]));

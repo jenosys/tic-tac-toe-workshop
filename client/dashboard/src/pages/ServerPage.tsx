@@ -1,10 +1,14 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createStyles, makeStyles, Theme, Slider, Typography } from '@material-ui/core';
 import React from 'react';
 import ServerList from '../components/ServerList';
-
+import api from '../api';
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({    
+  createStyles({
+    slider: {
+      width: 300,
+      margin: theme.spacing(1)
+    },
     toolbar: {
       display: 'flex',
       alignItems: 'center',
@@ -17,48 +21,60 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3),
     },
     margin: {
-      margin: theme.spacing(2),
+      margin: theme.spacing(1),
     },
   }),
 );
 
 interface Props {
-  servers: ServerStore[]
+  servers: ServerStore[],
+  idleServerCount: number
 }
 
-export default function ServerPage({ servers }: Props) {  
+export default function ServerPage({ servers, idleServerCount }: Props) {
   const classes = useStyles();
-  const idleServers = servers.filter(s => s.state === 'READY');
-  const busyServers = servers.filter(s => s.state === 'BUSY');
+  const idleServers = servers.filter(s => s.state === 'ready');
+  const busyServers = servers.filter(s => s.state === 'busy');
 
-  
+  function valuetext(value: number) {
+    return value.toString();
+  }
+
+  function onChangeIdleServerNumber(event: any, number: number | number[]) {
+    console.log(number);
+    api.desireIdleServerCount(number as number);
+  }
+
   return (
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {/* <Typography paragraph>
-          Monitoring Page
-          
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography> */}
-        <ServerList key='active' name={'Active'} servers={busyServers}/>
-        <ServerList key='idle' name={'Idle'} servers={idleServers}/>
-        {
-          // server.map(s => (
-          //   <Typography paragraph>
-          //     server address: {s.serverid} state: {s.state}
-          //   </Typography>            
-          // ))
-        }
-      </main>
+    <main className={classes.content}>
+      <div className={classes.toolbar} />
+
+      <div className={classes.slider}>
+        <Typography id="discrete-slider" gutterBottom>
+          대기 서버 개수 설정
+      </Typography>
+        <Slider
+          defaultValue={idleServerCount}
+          getAriaValueText={valuetext}
+          aria-labelledby="discrete-slider"
+          valueLabelDisplay="auto"
+          step={5}
+          marks
+          min={5}
+          max={50}
+          value={idleServerCount}
+          onChangeCommitted={onChangeIdleServerNumber}
+        />
+      </div>
+
+      <div className={classes.margin}>
+        <ServerList key='active' name={'Active'} servers={busyServers} />
+
+      </div>
+      <div className={classes.margin}>
+        <ServerList key='idle' name={'Idle'} servers={idleServers} />
+      </div>
+
+    </main>
   );
 }

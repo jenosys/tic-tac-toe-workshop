@@ -1,13 +1,8 @@
-import AWS from 'aws-sdk';
+import axios from 'axios';
+
+import AWS from './aws';
 import env from './env';
 
-
-if (env.NODE_ENV === 'development') {
-  let credentials = new AWS.SharedIniFileCredentials({ profile: 'container' });
-  AWS.config.credentials = credentials;  
-}
-
-AWS.config.update({ region: env.REGION });
 
 const NAMESPACE_NAME = 'tic-tac-toe';
 const SERVICE_NAME = 'dedi-servers';
@@ -17,6 +12,20 @@ let namespaceId = '';
 let serviceId = '';
 const instanceId = `${env.HOST}-${env.HOST_PORT}`;
 let registered = false;
+
+async function getMyTaskInfo() {
+  if (env.IS_IN_ECS) {
+    let res = await axios.get(`${process.env.ECS_CONTAINER_METADATA_URI}/task`, {
+      timeout: 1000,
+    });
+
+    return res.data;
+  } else {
+    return {
+      TaskARN: '+82-2-1577-1577'
+    }
+  }
+}
 
 export async function register() {
   let listNamespaces = await serviceDiscovery.listNamespaces({
@@ -59,19 +68,26 @@ export async function register() {
 
   serviceId = svc.Id!;
 
-  await serviceDiscovery.registerInstance({
+  let taskInfo = await getMyTaskInfo();
+
+  let promise = serviceDiscovery.registerInstance({
     Attributes: {
       'AWS_INSTANCE_IPV4': env.HOST,
       'AWS_INSTANCE_PORT': env.HOST_PORT,
-      'State': 'READY'
+      'STATE': 'ready',
+      'TASK_ARN': taskInfo.TaskARN
     },
     InstanceId: instanceId,
     ServiceId: serviceId
   }).promise();
 
-  registered = true;
+  promise.then(() => {
+    registered = true;
 
-  console.log('regisgtered on CloudMap');
+    console.log('regisgtered on CloudMap');
+  });
+
+  return promise;
 }
 
 export function deregister() {
@@ -80,7 +96,7 @@ export function deregister() {
       InstanceId: instanceId,
       ServiceId: serviceId
     }).promise();
-    
+
     promise.then(() => {
       registered = false;
       console.log('deregistered on CloudMap');
@@ -90,14 +106,20 @@ export function deregister() {
   }
 }
 
-export function updateState(state: string) {
-  serviceDiscovery.registerInstance({
+export function updateState(state: 'ready' | 'busy') {
+  let promise = serviceDiscovery.registerInstance({
     Attributes: {
       'AWS_INSTANCE_IPV4': env.HOST,
       'AWS_INSTANCE_PORT': env.HOST_PORT,
-      'State': state
+      'STATE': state
     },
     InstanceId: instanceId,
     ServiceId: serviceId
   }).promise();
+
+  promise.then(() => {
+    console.log('updated on CloudMap');
+  });
+
+  return promise;
 }

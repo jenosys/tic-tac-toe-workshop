@@ -3,7 +3,7 @@ interface ActionBase {
 }
 
 interface AuthActionType extends ActionBase {
-  type: "auth/SET"
+  type: 'data/AUTH' | 'data/DESIRE_IDLE_SRV_CNT'
 }
 
 interface UserActionType extends ActionBase {
@@ -16,30 +16,36 @@ interface ServerActionType extends ActionBase {
 
 interface StoreBase {}
 
-interface AuthStore extends StoreBase {
-  username?: string
+interface DataSture extends StoreBase {
+  username?: string;
+  desireIdleSrvCnt: number;
 }
 
 interface UserStore extends StoreBase {
-  username: string,
-  score: number
+  username: string;
+  score: number;
 }
 
 interface ServerStore extends StoreBase {
-  addr: string,
-  state: "READY" | "BUSY"
+  addr: string;
+  state: "ready" | "busy" | 'bind';
 }
 
 interface RootStore {
-  auth: AuthStore,
-  users: UserStore[],
-  servers: ServerStore[]
+  data: DataSture;
+  users: UserStore[];
+  servers: ServerStore[];
 };
+
+
+interface VarStore {
+  idleServerNumber: number;
+}
 
 type SingleAction<Type extends ActionBase, Store extends StoreBase> = Type & Partial<Store>;
 type GroupAction<Type extends ActionBase, Store extends StoreBase> = Type & Store[];
 
 
-type AuthAction = SingleAction<AuthActionType, AuthStore>;
+type DataAction = SingleAction<AuthActionType, DataSture>;
 type UserAction = Action<UserActionType, UserStore> | GroupAction<UserActionType, UserStore>;
 type ServerAction = Action<ServerActionType, ServerStore>;

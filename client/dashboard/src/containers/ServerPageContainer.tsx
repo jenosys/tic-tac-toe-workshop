@@ -4,20 +4,22 @@ import ServerPage from '../pages/ServerPage';
 
 interface Props {
   servers: ServerStore[];
+  idleServerCount: number;
 }
 
 class GamePageContainer extends React.Component<Props> {
   render() {
-    const { servers } = this.props;
+    const { servers, idleServerCount } = this.props;
 
     return (
-      <ServerPage servers={servers}/>
+      <ServerPage servers={servers} idleServerCount={idleServerCount}/>
     )
   }
 };
 
 export default connect(
   (state: RootStore) => ({
-    servers: state.servers
+    servers: state.servers,
+    idleServerCount: state.data.desireIdleSrvCnt
   }) as Props,
 )(GamePageContainer);

@@ -21,7 +21,7 @@ class MainMenuContainer extends React.Component<Props> {
 
 export default connect(
   (state: RootStore) => ({
-    auth: state.auth,
+    auth: state.data,
     userCount: state.users.length,
     serverCount: state.servers.length
   }) as Props,

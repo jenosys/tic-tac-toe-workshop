@@ -5,7 +5,7 @@ export const addServer = (addr: ServerStore['addr']): ServerAction =>
 ({
   type: "server/ADD",
   addr,
-  state: "READY"
+  state: "ready"
 });
 
 export const updateServer = (addr: ServerStore['addr'], state: ServerStore['state']): ServerAction =>
@@ -21,12 +21,20 @@ export const removeServer = (addr: ServerStore['addr']): ServerAction =>
   addr
 });
 
+export const replaceServers = (servers: ServerStore[]): ServerAction => 
+({
+  type: 'server/REPLACE',
+  servers
+});
 
 
 const initialState: ServerStore[] = [];
 
 export default function servers(state = initialState, action: ServerAction) {
   switch (action.type) {
+    case 'server/REPLACE':
+      return action.servers as ServerStore[];
+
     case "server/ADD":
       return state.find(s => s.addr === action.addr)
         ? state
