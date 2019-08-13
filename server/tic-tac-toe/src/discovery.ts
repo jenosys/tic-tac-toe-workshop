@@ -2,7 +2,6 @@ import axios from 'axios';
 
 import AWS from './aws';
 import env from './env';
-import { endianness } from 'os';
 
 
 const NAMESPACE_NAME = 'tic-tac-toe';
@@ -62,7 +61,7 @@ export async function register() {
       'AWS_INSTANCE_PORT': env.HOST_PORT,
       'STATE': 'ready',
       'TASK_ARN': env.TASK_ARN,
-      'LAUNCH_TYPE:': env.LAUNCH_TYPE,
+      'LAUNCH_TYPE': env.LAUNCH_TYPE,
       'IMAGE': env.IMAGE
     },
     InstanceId: instanceId,

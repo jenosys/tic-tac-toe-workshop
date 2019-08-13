@@ -167,6 +167,7 @@ class Discovery {
         'TASK_ARN': server.taskArn,
         'DEFINITION': server.image,
         'STATE': state,
+        'LAUNCH_TYPE': server.launchType
       },
       InstanceId: server.id,
       ServiceId: this.svcId
