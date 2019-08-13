@@ -10,9 +10,6 @@ window.Tweener = Tweener
 window.tweener = new Tweener();
 
 const { endpoint, username } = function() {
-  console.log(location.search);
-  console.log(queryString.parse(location.search));
-  
   let { hostname, username } = queryString.parse(location.search);
   hostname = hostname || (
     window.location.host === 'localhost:8080'
@@ -24,12 +21,6 @@ const { endpoint, username } = function() {
     username
   }
 }.bind(this)();
-
-
-// define endpoint based on environment
-// const endpoint = (window.location.hostname.indexOf("herokuapp") === -1)
-//   ? "ws://localhost:3553" // development (local)
-//   : `${window.location.protocol.replace("http", "ws")}//${window.location.hostname}` // production (remote)
 
 import { Client } from 'colyseus.js'
 window.colyseus = new Client(endpoint);

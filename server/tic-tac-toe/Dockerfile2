@@ -14,13 +14,15 @@ ENV PATH=/root/.local/bin:$PATH
 
 WORKDIR /app
 
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
 EXPOSE 3553
 
 COPY package*.json ./
 RUN npm install
 COPY . .
 
-CMD ["node", "build/index.js"]
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+COPY entrypoint2.sh .
+RUN chmod +x entrypoint2.sh
+
+
+CMD ["node", "build/index2.js"]
+ENTRYPOINT ["/app/entrypoint2.sh"]

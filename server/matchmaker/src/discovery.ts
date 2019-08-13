@@ -10,6 +10,8 @@ export interface DediServer {
   port: number;
   state: 'ready' | 'bind' | 'busy';
   taskArn: string;
+  launchType: 'EC2' | 'FARGATE';
+  image: string;
 }
 
 const NAMESPACE_NAME = 'tic-tac-toe';
@@ -87,7 +89,7 @@ class Discovery {
     }, 5000);
   }
 
-  async refresh() {
+  private async refresh() {
     let nextToken: string | undefined;
     let array: DediServer[] = [];
 
@@ -105,8 +107,10 @@ class Discovery {
             id: ins.Id!,
             ipv4: ins.Attributes!.AWS_INSTANCE_IPV4,
             port: parseInt(ins.Attributes!.AWS_INSTANCE_PORT),
-            state: ins.Attributes!.STATE as DediServer['state'] || 'ready',
-            taskArn: ins.Attributes!.TASK_ARN
+            state: ins.Attributes!.STATE as DediServer['state'],
+            launchType: ins.Attributes!.LAUNCH_TYPE as DediServer['launchType'],
+            taskArn: ins.Attributes!.TASK_ARN,
+            image: ins.Attributes!.IMAGE
           });
         });
 
@@ -135,6 +139,7 @@ class Discovery {
               }
             });
 
+            console.error(error);
             console.log(`dedi server(${srv.id}, ${srv.ipv4}:${srv.port}) doesn't respond`);
           });
       }))
@@ -142,7 +147,32 @@ class Discovery {
 
     this._servers = mixedArray.filter(elem => !!elem) as DediServer[];
 
-    console.log(this._servers);
+    // console.log(this._servers);
+  }
+
+  getIdleAndBind() {
+    let selected = this._servers.randomPick(1)[0];
+
+    this._servers.splice(this._servers.indexOf(selected), 1);
+    this.updateState(selected, 'bind');
+
+    return selected;
+  }
+
+  private updateState(server: DediServer, state: 'ready' | 'busy' | 'bind') {
+    let promise = this.sd.registerInstance({
+      Attributes: {
+        'AWS_INSTANCE_IPV4': server.ipv4,
+        'AWS_INSTANCE_PORT': server.port.toString(),
+        'TASK_ARN': server.taskArn,
+        'DEFINITION': server.image,
+        'STATE': state,
+      },
+      InstanceId: server.id,
+      ServiceId: this.svcId
+    }).promise();
+
+    return promise;
   }
 }
 

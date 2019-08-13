@@ -33,7 +33,7 @@ interface Props {
 
 export default function ServerPage({ servers, idleServerCount }: Props) {
   const classes = useStyles();
-  const idleServers = servers.filter(s => s.state === 'ready');
+  const idleServers = servers.filter(s => s.state === 'ready' || s.state === 'bind');
   const busyServers = servers.filter(s => s.state === 'busy');
 
   function valuetext(value: number) {

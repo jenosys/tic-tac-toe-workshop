@@ -1,7 +1,9 @@
 import axios from 'axios';
 import io from 'socket.io-client';
+import env from './env';
 
 
+const apiServer = env.API_URL;
 
 
 interface socketParam {
@@ -10,18 +12,8 @@ interface socketParam {
   onUpdateVars: (vars: VarStore) => void,
 }
 
-
-const matchServerHost = 'localhost:8888';
-
-const instance = axios.create({
-  baseURL: 'http://localhost:8888',
-  timeout: 1000,
-  headers: {}
-});
-
-
 function ioConnect({ onUpdateUsers, onUpdateServers, onUpdateVars }: socketParam) {
-  const socket = io(matchServerHost, {
+  const socket = io(apiServer, {
     transports: [ 'websocket' ]
   });
 
@@ -46,7 +38,22 @@ function ioConnect({ onUpdateUsers, onUpdateServers, onUpdateVars }: socketParam
   })
 }
 
-function idleServerCount(number: number) {
+
+const instance = axios.create({
+  baseURL: `${apiServer}/api`,
+  timeout: 1000,
+  headers: {}
+});
+
+function requestMatching(username: string) {
+  return instance.post('/requestMatching', {
+    username
+  }, {
+    timeout: 40000
+  });
+}
+
+function desireIdleServerCount(number: number) {
   return instance.post('/idleServerCount', {
     number
   });
@@ -66,7 +73,9 @@ function blockDediServer(addr: string) {
 
 export default {
   ioConnect,
+
+  requestMatching,
   activeDediServer,
   blockDediServer,
-  desireIdleServerCount: idleServerCount,
+  desireIdleServerCount
 }

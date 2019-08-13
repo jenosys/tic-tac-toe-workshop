@@ -1,18 +1,15 @@
-import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
-import { useTheme } from '@material-ui/styles';
+ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import BLockIcon from '@material-ui/icons/Block';
-
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import { useTheme } from '@material-ui/styles';
+import React from 'react';
 import api from '../api';
+
 
 
 const useStyles1 = makeStyles((theme: Theme) =>
@@ -69,32 +66,38 @@ function ServerCard({ server, control }: ServerCardProps) {
       console.log(result);
     });
   };
-  
+
   return (
     <Grid item xs={3}>
       {/* <Paper className={classes.paper}>{server.addr}</Paper> */}
       <Card className={classes.card}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-          {server.addr}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-          {server.state}
-          </Typography>
-        </CardContent>
-        { control && 
-        <div className={classes.controls}>
-          <IconButton aria-label="play" onClick={onClickActive}>
-            <PlayArrowIcon className={classes.icon} />
-          </IconButton>
-          <IconButton aria-label="block" onClick={onClickBlock}>
-            <BLockIcon className={classes.icon} />
-          </IconButton>
+        <div className={classes.details}>
+          <CardContent className={classes.content}>
+            <Typography component="h5" variant="h5">
+              {server.addr}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              {server.state}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              {server.launchType}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              {server.image}
+            </Typography>
+          </CardContent>
+          {control &&
+            <div className={classes.controls}>
+              <IconButton aria-label="play" onClick={onClickActive}>
+                <PlayArrowIcon className={classes.icon} />
+              </IconButton>
+              <IconButton aria-label="block" onClick={onClickBlock}>
+                <BLockIcon className={classes.icon} />
+              </IconButton>
+            </div>
+          }
         </div>
-        }
-      </div>
-    </Card>
+      </Card>
     </Grid>
   )
 }
@@ -131,7 +134,7 @@ export default function ServerList({ name, servers }: ServerListProps) {
         <Grid container item xs={12} spacing={2}>
           {
             servers.map(s => (
-              <ServerCard key={s.addr} server={s} control={ name === 'Idle'} />
+              <ServerCard key={s.addr} server={s} control={name === 'Idle'} />
             ))
           }
         </Grid>

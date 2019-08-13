@@ -9,7 +9,11 @@
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/src"
+      "webRoot": "${workspaceFolder}/src",
+      "env": {
+        "API_URL"	: "matchmaker-ALB-1113686460.ap-northeast-2.elb.amazonaws.com",
+        "CLIENT_URL": "tic-tac-toe-client-1511928333.ap-northeast-2.elb.amazonaws.com"
+      }
     }
   ]
 }

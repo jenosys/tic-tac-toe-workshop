@@ -29,6 +29,8 @@ interface UserStore extends StoreBase {
 interface ServerStore extends StoreBase {
   addr: string;
   state: "ready" | "busy" | 'bind';
+  image: string;
+  launchType: 'EC2' | 'FARGATE';
 }
 
 interface RootStore {

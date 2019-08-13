@@ -2,30 +2,18 @@ import axios from 'axios';
 
 import AWS from './aws';
 import env from './env';
+import { endianness } from 'os';
 
 
 const NAMESPACE_NAME = 'tic-tac-toe';
 const SERVICE_NAME = 'dedi-servers';
 
+
 const serviceDiscovery = new AWS.ServiceDiscovery({ apiVersion: '2017-03-14' });
 let namespaceId = '';
 let serviceId = '';
-const instanceId = `${env.HOST}-${env.HOST_PORT}`;
+const instanceId = `${env.HOST_IP}-${env.HOST_PORT}`;
 let registered = false;
-
-async function getMyTaskInfo() {
-  if (env.IS_IN_ECS) {
-    let res = await axios.get(`${process.env.ECS_CONTAINER_METADATA_URI}/task`, {
-      timeout: 1000,
-    });
-
-    return res.data;
-  } else {
-    return {
-      TaskARN: '+82-2-1577-1577'
-    }
-  }
-}
 
 export async function register() {
   let listNamespaces = await serviceDiscovery.listNamespaces({
@@ -68,14 +56,14 @@ export async function register() {
 
   serviceId = svc.Id!;
 
-  let taskInfo = await getMyTaskInfo();
-
   let promise = serviceDiscovery.registerInstance({
     Attributes: {
-      'AWS_INSTANCE_IPV4': env.HOST,
+      'AWS_INSTANCE_IPV4': env.HOST_IP,
       'AWS_INSTANCE_PORT': env.HOST_PORT,
       'STATE': 'ready',
-      'TASK_ARN': taskInfo.TaskARN
+      'TASK_ARN': env.TASK_ARN,
+      'LAUNCH_TYPE:': env.LAUNCH_TYPE,
+      'IMAGE': env.IMAGE
     },
     InstanceId: instanceId,
     ServiceId: serviceId
@@ -109,9 +97,12 @@ export function deregister() {
 export function updateState(state: 'ready' | 'busy') {
   let promise = serviceDiscovery.registerInstance({
     Attributes: {
-      'AWS_INSTANCE_IPV4': env.HOST,
+      'AWS_INSTANCE_IPV4': env.HOST_IP,
       'AWS_INSTANCE_PORT': env.HOST_PORT,
-      'STATE': state
+      'STATE': state,
+      'TASK_ARN': env.TASK_ARN,
+      'LAUNCH_TYPE': env.LAUNCH_TYPE,
+      'IMAGE': env.IMAGE      
     },
     InstanceId: instanceId,
     ServiceId: serviceId
