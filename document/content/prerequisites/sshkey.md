@@ -1,5 +1,5 @@
 ---
-title: "Create an SSH key"
+title: "SSH 키 생성하기"
 chapter: false
 weight: 31
 ---
