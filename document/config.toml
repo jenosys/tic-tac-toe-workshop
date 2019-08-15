@@ -1,0 +1,49 @@
+languageCode = "kr-ko"
+ignoreFiles = [ "\\.files/README.md$",  ]
+defaultContentLanguage = "en"
+title = "ECS HoL"
+theme = "learn"
+uglyurls = false
+googleAnalytics = ""
+sectionPagesMenu = "main"
+relativeURLs = true
+
+[blackfriday]
+hrefTargetBlank = true
+
+[params]
+editURL = "https://github.com/aws-samples/eks-workshop/edit/master/content/"
+themeVariant = "mine"
+showVisitedLinks = false
+author = "Brent Langston"
+description = "ECS HoL"
+disableSearch = false
+disableAssetsBusting = false
+disableLanguageSwitchingButton = true
+disableShortcutsTitle=false
+disableInlineCopyToClipBoard = true
+ghrepo = "https://github.com/aws-samples/eks-workshop/"
+branch = "master"
+template_bucket = "eksworkshop.com"
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+pygmentsCodefencesGuessSyntax = true
+pygmentsStyle = "tango"
+
+
+
+#
+
+[menu]
+  [[menu.main]]
+    identifier = "Prerequisites"
+    name = "This is the Mu track"
+    title = "Workshop using Mu"
+    url = "/mu/"
+    weight = -110
+
+
+
+[outputs]
+home = [ "HTML", "JSON"]
+page = [ "HTML" ]
