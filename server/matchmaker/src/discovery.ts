@@ -2,13 +2,14 @@ import axios from 'axios';
 import interval from 'interval-promise';
 
 import AWS from './aws';
+import { IoTJobsDataPlane } from 'aws-sdk';
 
 
 export interface DediServer {
   id: string;
   ipv4: string;
   port: number;
-  state: 'ready' | 'bind' | 'busy';
+  state: 'ready' | 'bind' | 'busy' | 'unhealthy';
   taskArn: string;
   launchType: 'EC2' | 'FARGATE';
   image: string;
@@ -122,22 +123,25 @@ class Discovery {
 
     let mixedArray = await Promise.all(
       array.map(srv => new Promise<DediServer | undefined>(resolve => {
+        if (srv.state === 'unhealthy') { resolve(srv); }
+
         axios.get(`http://${srv.ipv4}:${srv.port}/health`, { timeout: 2000 })
           .then(() => {
             resolve(srv);
           })
           .catch(error => {
-            resolve();
+            resolve(srv);
 
-            // 응답 하지 않는 데디 서버를 CloudMap에서 지웁니다.            
-            this.sd.deregisterInstance({
-              InstanceId: srv.id,
-              ServiceId: this.svcId
-            }, (err, data) => {
-              if (err) {
-                console.log(err, err.stack);
-              }
-            });
+            this.updateState(srv, 'unhealthy');
+
+            // this.sd.deregisterInstance({
+            //   InstanceId: srv.id,
+            //   ServiceId: this.svcId
+            // }, (err, data) => {
+            //   if (err) {
+            //     console.log(err, err.stack);
+            //   }
+            // });
 
             console.error(error);
             console.log(`dedi server(${srv.id}, ${srv.ipv4}:${srv.port}) doesn't respond`);
@@ -145,7 +149,9 @@ class Discovery {
       }))
     );
 
-    this._servers = mixedArray.filter(elem => !!elem) as DediServer[];
+    this._servers = mixedArray as DediServer[];
+
+    // this._servers = mixedArray.filter(elem => !!elem) as DediServer[];
 
     // console.log(this._servers);
   }
@@ -159,7 +165,7 @@ class Discovery {
     return selected;
   }
 
-  private updateState(server: DediServer, state: 'ready' | 'busy' | 'bind') {
+  private updateState(server: DediServer, state: 'ready' | 'busy' | 'bind' | 'unhealthy') {
     let promise = this.sd.registerInstance({
       Attributes: {
         'AWS_INSTANCE_IPV4': server.ipv4,

@@ -4,7 +4,7 @@ chapter: true
 weight: 2
 ---
 
-# ECS 클러스터 생성하기
+## ECS 클러스터 생성하기
 
 1. 상단의 왼쪽의 **Services** 메뉴를 통해 ECS로 넘어갑니다.
 1. 상단 우측 메뉴에서 현재 리전이 **Oregon**인지 확인합니다.
@@ -19,7 +19,7 @@ weight: 2
 
 1. **Networking**항목에서 **Create VPC**를 선택해서 새로운 VPC를 생성합니다.
 **CIDR block** 및 **Subnet** 설정은 그대로 둡니다.
-1. Container instance IAM role에서 앞서 만든 tic-tac-toe-ecs-role 을 넣습니다.
+1. **Container instance IAM role**은 앞서 만든 tic-tac-toe-ecs-role 을 넣습니다.
 1. 하단의 **Create**를 선택하여 다음으로 넘어갑니다.
 ![Example Service](/images/tic-tac-toe/cluster-build-3.png)
 

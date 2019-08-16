@@ -26,9 +26,6 @@ Ad blocker나 tracking blocker는 Cloud9 사용에 방해를 줄 수 있습니�
 ### Launch Cloud9 in your closest region:
 {{< tabs name="Region" >}}
 {{{< tab name="Oregon" include="us-west-2.md" />}}
-{{{< tab name="Ireland" include="eu-west-1.md" />}}
-{{{< tab name="Ohio" include="us-east-2.md" />}}
-{{{< tab name="Singapore" include="ap-southeast-1.md" />}}
 {{< /tabs >}}
 
 - **Create environment** 을 선택합니다. 

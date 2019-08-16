@@ -1,5 +1,5 @@
 ---
-title: "서비스 검사하기"
+title: "서비스 확인"
 date: 2018-08-07T08:30:11-07:00
 weight: 4
 ---
@@ -10,3 +10,4 @@ weight: 4
 
 이제 모든 준비는 끝났습니다.
 게임서버를 준비시켜보겠습니다.
+![Example Service](/images/tic-tac-toe/hol-ready.png)

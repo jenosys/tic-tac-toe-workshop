@@ -5,4 +5,5 @@ weight: 70
 ---
 
 # Cleanup
-![Cleaned Environment](/images/cleanup.svg)
+
+여기부터는 아직 문서화 전입니다.
