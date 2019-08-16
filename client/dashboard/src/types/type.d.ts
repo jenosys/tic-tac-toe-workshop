@@ -31,6 +31,7 @@ interface ServerStore extends StoreBase {
   state: "ready" | "busy" | 'bind';
   image: string;
   launchType: 'EC2' | 'FARGATE';
+  status: 'healthy' | 'unhealthy';
 }
 
 interface RootStore {

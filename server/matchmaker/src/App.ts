@@ -29,6 +29,7 @@ interface Server {
 	addr: string;
 	definition: string;
 	state: 'ready' | 'busy';
+	status: 'healthy' | 'unhealthy';
 	image: string;
 	launchType: string;
 }
@@ -174,6 +175,7 @@ class App {
 					addr: `${srv.ipv4}:${srv.port}`,
 					definition: srv.image,
 					state: srv.state,
+					status: srv.status,
 					image: srv.image,
 					launchType: srv.launchType
 				} as Server;

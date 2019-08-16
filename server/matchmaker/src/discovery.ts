@@ -122,24 +122,24 @@ class Discovery {
       console.error(e);
     }
 
-    let mixedArray = await Promise.all(
+    await Promise.all(
       array.map(srv => new Promise<DediServer | undefined>(resolve => {
         axios.get(`http://${srv.ipv4}:${srv.port}/health`, { timeout: 2000 })
           .then(() => {
             srv.status = "healthy";
-            resolve(srv);
+            resolve();
           })
           .catch(error => {
             srv.status = 'unhealthy';
-            resolve(srv);
+            resolve();
 
-            console.error(error);
+            // console.error(error);
             console.log(`dedi server(${srv.ipv4}:${srv.port}) doesn't respond`);
           });
       }))
     );
 
-    this._servers = mixedArray as DediServer[];
+    this._servers = array;
   }
 
   getIdleAndBind() {
@@ -157,7 +157,7 @@ class Discovery {
         'AWS_INSTANCE_IPV4': server.ipv4,
         'AWS_INSTANCE_PORT': server.port.toString(),
         'TASK_ARN': server.taskArn,
-        'DEFINITION': server.image,
+        'IMAGE': server.image,
         'STATE': state,
         'LAUNCH_TYPE': server.launchType
       },
