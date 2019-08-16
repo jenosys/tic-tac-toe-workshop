@@ -4,22 +4,18 @@ chapter: false
 weight: 31
 ---
 
-{{% notice info %}}
-Starting from here, when you see command to be entered such as below, you will enter these commands into Cloud9 IDE. You can use the **Copy to clipboard** feature (right hand upper corner) to simply copy and paste into Cloud9. In order to paste, you can use Ctrl + V for Windows or Command + V for Mac.
-{{% /notice %}}
-
-Please run this command to generate SSH Key in Cloud9. This key will be used on the worker node instances to allow ssh access if necessary.
+SSH키를 생성하기 위해 아래 명령어를 Cloud9에서 수행하세요. 이 키는 앞으로 ECS 클러스터 워커 노드에 접속할때 사용할 것입니다.
 
 ```bash
 ssh-keygen
 ```
 
 {{% notice tip %}}
-Press `enter` 3 times to take the default choices
+`엔터`를 3번 눌러서 명령어를 완료 하면 됩니다.
 {{% /notice %}}
 
-Upload the public key to your EC2 region:
+만든 퍼블릭 키를 EC2 리전에 업로드 합니다.:
 
 ```bash
-aws ec2 import-key-pair --key-name "eksworkshop" --public-key-material file://~/.ssh/id_rsa.pub
+aws ec2 import-key-pair --key-name "tic-tac-toe" --public-key-material file://~/.ssh/id_rsa.pub
 ```

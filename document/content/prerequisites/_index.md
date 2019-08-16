@@ -7,4 +7,4 @@ weight: 10
 # 워크샵 시작
 이번 워크샵은 Cloud9 에서 개발환경을 구축하고 진행하게 됩니다.
 
-Once you have completed with either setup, continue with [**Create a SSH key section**](/prerequisites/sshkey/)
+이 문서는 한글 표기를 따르지만 스크린샷은 영문 콘솔로 진행했습니다.
