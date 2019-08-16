@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>서비스 구성 on ECS HoL</title>
+    <link>/tic-tac-toe/configure_service/</link>
+    <description>Recent content in 서비스 구성 on ECS HoL</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>kr-ko</language>
+    <lastBuildDate>Tue, 07 Aug 2018 08:30:11 -0700</lastBuildDate>
+    
+	<atom:link href="/tic-tac-toe/configure_service/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>대시보드 서비스 만들기</title>
+      <link>/tic-tac-toe/configure_service/make_service_dashboard/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_service/make_service_dashboard/</guid>
+      <description>대시보드 서비스는 daboard ALB와 FARGATE 작업을 연동한 웹서비스가 될 예정입니다.
+서비스 구성  ECS 서비스로 갑니다. 앞서 만든 tic-tac-toe-cluster를 선택합니다. 탭 메뉴에서 Services를 선택하고 Create를 선택합니다. 아래와 같이 입력합니다.  Launch type: FARGATE
+Task Definition: Family: dashboard, Revision: 1
+실수 없이 잘 따라오셨다면 dashboard 작업 정의는 1개의 리비전을 가지고 있습니다. 혹 개정을 하셨다면 가장 최신 리비전을 선택하시면 됩니다. 우리는 중간에 dashboard 컨테이너를 새로 묶어서 올린적이 있습니다. 컨테이너 리비전과 작업 정의 리비전은 다른것임을 염두하셔야 합니다.</description>
+    </item>
+    
+    <item>
+      <title>클라이언트 서비스 만들기</title>
+      <link>/tic-tac-toe/configure_service/make_service_client/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_service/make_service_client/</guid>
+      <description>클라이언트 서비스는 tic-tac-toe-client-ALB와 FARGATE 작업을 연동한 웹서비스가 될 예정입니다. 앞 페이지의 생성 경험을 살려 아래 값대로 서비스를 생성해 주시기 바랍니다.
+서비스 구성 Launch type: FARGATE
+Task Definition: Family: tic-tac-toe-client, Revision: 1
+Service name: tic-tac-toe-client
+Number of tasks: 2
+다른 옵션은 기본값을 사용합니다.
+Next step 을 선택합니다.
+네트워크 구성 아래와 같이 입력합니다.
+Cluster VPC: tic-tac-toe-vpc
+Subnets: 선택 가능한 2개의 서브넷 모두 선택
+Security groups 1. Edit 선택 1. Select existing security group 선택 1.</description>
+    </item>
+    
+    <item>
+      <title>매치메이커 서비스 만들기</title>
+      <link>/tic-tac-toe/configure_service/make_service_matchmaker/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_service/make_service_matchmaker/</guid>
+      <description>매치메이커 서비스는 matchmaker-ALB와 EC2 작업을 연동한 Restful 웹서비스가 될 예정입니다.
+매치 메이커 서버에는 서비스 상태를 모니터링하고 변경사항을 클라이언트에게 보내주는 로직이 들어있습니다. 따라서 2개 이상의 서버가 뜨면 동작이 이상해 질 수 있습니다. 그래서 1개의 작업만 유지되도록 설정했습니다.
+1개의 작업이라도 서비스로 등록하면 작업이 비정상 종료되거나 호스트가 비정상 종료되더라도 ECS가 다시 띄워주므로 활용가치가 있습니다.
+서비스 구성  서비스 생성을 선택합니다. 아래와 같이 입력합니다.  Launch type: EC2
+Task Definition: Family: matchmaker, Revision: 1</description>
+    </item>
+    
+    <item>
+      <title>서비스 확인</title>
+      <link>/tic-tac-toe/configure_service/make_service_done/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_service/make_service_done/</guid>
+      <description>아까 띄워둔 대시보드를 새로고침 합니다. 창을 닫았다면 dashboard-ALB의 주소를 다시 입력합니다. 매치메이커 서버가 정상적으로 뜨고 잘 연결된다면 현재 유저수가 1로 잘 표시됩니다. 브라우저를 여러개 띄웠다면 숫자는 다를 수 있습니다.
+이제 모든 준비는 끝났습니다. 게임서버를 준비시켜보겠습니다. </description>
+    </item>
+    
+  </channel>
+</rss>

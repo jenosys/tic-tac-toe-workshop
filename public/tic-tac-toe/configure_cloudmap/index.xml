@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>클라우드맵 구성 on ECS HoL</title>
+    <link>/tic-tac-toe/configure_cloudmap/</link>
+    <description>Recent content in 클라우드맵 구성 on ECS HoL</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>kr-ko</language>
+    <lastBuildDate>Tue, 07 Aug 2018 08:30:11 -0700</lastBuildDate>
+    
+	<atom:link href="/tic-tac-toe/configure_cloudmap/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>VPC 이름 변경</title>
+      <link>/tic-tac-toe/configure_cloudmap/check_vpc/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_cloudmap/check_vpc/</guid>
+      <description>서비스에서 VPC로 이동
+ECS 클러스터 생성시 자동으로 만든 VPC를 확인한다. 적어놨으면 좋고 아니면 CIDR가 10.0.0.0/16 인것을 찾는다.
+알아보기 쉽도록 해당 vpc의 이름에 tic-tac-toe-vpc 를 적어준다.</description>
+    </item>
+    
+    <item>
+      <title>타겟 그룹 만들기</title>
+      <link>/tic-tac-toe/configure_cloudmap/make_target_group/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_cloudmap/make_target_group/</guid>
+      <description>EC2 서비스로 넘어간다. 타겟 그룹을 선택하고 Create target group을 선택하고 아래와 같이 입력한다.
+Target group name: matchmaker
+Target type: IP
+VPC: tic-tac-toe-vpc
+Health check settings/Path: /api/health 헬스체크 시간을 단축하기 위해 Advanced health check settings의 파라메터를 아래와 같이 수정한다.
+Healthy threshold: 3
+Interval: 10
+위와 같은 방법으로 2개의 타겟 그룹을 더 만든다. 달라지는것은 Target group name와 Health check settings/Path다.
+Target group name: dashboard
+Health check settings/Path: /
+Target group name: tic-tc-toe-client</description>
+    </item>
+    
+    <item>
+      <title>클라우드 맵 만들기</title>
+      <link>/tic-tac-toe/configure_cloudmap/make_cloudmap/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_cloudmap/make_cloudmap/</guid>
+      <description>여기서 만드는 네임스페이스와 서비스이름은 소스에 하드코딩으로 들어가있습니다. 따라서 이름을 정확히 입력해야 합니다. 오타가 생겼다면 삭제하고 다시 만듭니다.
+ 네임스페이스 생성  서비스 에서 AWS Cloud Map 을 선택합니다. Create namespace 를 선택합니다. Namespace name은 tic-tac-toe 이고 Instance discovery타입은 API calls 입니다. Create namespace를 선택합니다. 네임스페이스가 생성되는데 시간이 조금 걸립니다. 생성이 완료되면 화면이 갱신됩니다. 기다려도 반응이 없다면 새로고침을 합니다. 생성된 tic-tac-toe 네임스페이스를 클릭해서 들어갑니다.  서비스 생성  Create service를 선택합니다.</description>
+    </item>
+    
+  </channel>
+</rss>

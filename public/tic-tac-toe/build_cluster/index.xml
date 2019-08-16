@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ECS 클러스터 생성 on ECS HoL</title>
+    <link>/tic-tac-toe/build_cluster/</link>
+    <description>Recent content in ECS 클러스터 생성 on ECS HoL</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>kr-ko</language>
+    
+	<atom:link href="/tic-tac-toe/build_cluster/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ECS EC2를 위한 IAM 역할 만들기</title>
+      <link>/tic-tac-toe/build_cluster/iamrole/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tic-tac-toe/build_cluster/iamrole/</guid>
+      <description>ECS 클러스터의 EC2가 사용할 IAM 역할을 만듭니다.
+ IAM 에 가서 Roles 를 선택합니다. Create role을 선택합니다. 위에서부터 순서대로 AWS service/EC2/Elastic Container Service 를 선택합니다. 하단에 새롭게 표시되는 Select your use case에서 EC2 Role for Elastic Container Service를 선택합니다. Next: Permissions를 선택합니다.  반복적으로 Next:를 눌러 Review페이지까지 진행합니다.
+ Role name 에는 tic-tac-toe-ecs-role 을 입력하고 Create role을 선택합니다.   </description>
+    </item>
+    
+    <item>
+      <title>ECS 클러스터 생성하기</title>
+      <link>/tic-tac-toe/build_cluster/build_cluster/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tic-tac-toe/build_cluster/build_cluster/</guid>
+      <description>ECS 클러스터 생성하기  상단의 왼쪽의 Services 메뉴를 통해 ECS로 넘어갑니다. 상단 우측 메뉴에서 현재 리전이 Oregon인지 확인합니다. 왼쪽 사이드 메뉴에서 Cluster를 선택하고 Create Cluster를 선택합니다. 클러스터 종류는 EC2 Linux + Networking 을 선택하고 Next step을 선택합니다.  Cluster name 에 tic-tac-toe-cluster 를 적습니다. EC2 instance type은 m5.2xlarge를 선택합니다. Number of instances는 3을 입력합니다. key pair는 앞서 만든 tic-tac-toe 을 선택합니다.  Networking항목에서 Create VPC를 선택해서 새로운 VPC를 생성합니다. CIDR block 및 Subnet 설정은 그대로 둡니다.</description>
+    </item>
+    
+    <item>
+      <title>보안그룹 수정</title>
+      <link>/tic-tac-toe/build_cluster/edit_sg/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tic-tac-toe/build_cluster/edit_sg/</guid>
+      <description> 클러스터를 만들면서 자동으로 생성된 보안그룹은 우리가 원하는 포트를 포함하고 있지 않습니다. 이를 수정해줍니다.
+보안그룹 수정  상단의 왼쪽의 Services 메뉴를 통해 EC2로 넘어갑니다. 좌측 사이드 메뉴에서 Security Groups를 선택합니다. 필터에서 tic-tac-toe-cluster를 입력합니다. 하단에 하나의 보안그룹이 나타압니다. 보안그룹을 선택하고 하단의 탭 메뉴에서 Inbound를 선택합니다. Edit를 선택합니다. 아래와 같이 수정합니다.   22 포트 혀용 8888 포트 허용 32768 ~ 60999 포트 허용  </description>
+    </item>
+    
+  </channel>
+</rss>

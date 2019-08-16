@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ECR 구성 on ECS HoL</title>
+    <link>/tic-tac-toe/configure_ecr/</link>
+    <description>Recent content in ECR 구성 on ECS HoL</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>kr-ko</language>
+    <lastBuildDate>Tue, 07 Aug 2018 08:30:11 -0700</lastBuildDate>
+    
+	<atom:link href="/tic-tac-toe/configure_ecr/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>첫번째 리포지토리 만들기</title>
+      <link>/tic-tac-toe/configure_ecr/make_first_ecr/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_ecr/make_first_ecr/</guid>
+      <description>ECS 메뉴에서 사이드의 Repositories를 선택합니다. Create repository를 선택합니다. 첫번째 리포지토리는 이름을 matchmaker로 합니다.  방금 만든 matchmaker를 선택하고 메뉴에서 View push commands를 선택합니다. 이 화면에는 4개의 커맨드를 포함하고 있습니다. 이는 ECR에 컨테이너 이미지를 푸시하기 위해 필요한 명령어 순서 입니다. 이 명령어들을 순서에 맞춰 복사해 놓습니다.
+Cloud9 워크샵으로 돌아가서 tic-tac-toe-workshop/tic-tac-toe-workshop/server/matchmaker/build.sh 파일을 엽니다. 이 파일엔 ECR 푸시명령어들이 주석처리되어 있는데 이 주석들을 지우고 아까 복사한 명령어를 넣습니다.
+결과 화면은 다음 스크린샷처럼 5줄의 명령어로 이뤄어져있어야 합니다.</description>
+    </item>
+    
+    <item>
+      <title>나머지 리포지토리 만들기</title>
+      <link>/tic-tac-toe/configure_ecr/make_others_ecr/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_ecr/make_others_ecr/</guid>
+      <description>앞서 만든 방법과 동일하게 3개의 리파지토리를 더 만듭니다. 각각의 이름은
+dashboard
+tic-tac-toe-server
+tic-tac-toe-client
+입니다.
+dashboard 에서 얻은 푸시 명령어는 tic-tac-toe-workshop/tic-tac-toe-workshop/server/dashboard/build.sh 에 적어줍니다.
+tic-tac-toe-server 에서 얻은 푸시 명령어는 tic-tac-toe-workshop/tic-tac-toe-workshop/server/tic-tac-toe/build.sh 에 적습니다.
+tic-tac-toe-client 에서 얻은 푸시 명령어는 tic-tac-toe-workshop/tic-tac-toe-workshop/client/tic-tac-toe/build.sh 에 적어줍니다.
+급하게 하면 헷갈릴수 있습니다. 간단한 반복 작업이니 천천히 확인하면서 하시면 어렵지 않습니다. 4개의 리포지토리를 다 만들고 나면 다음 화면과 같이 보입니다. </description>
+    </item>
+    
+    <item>
+      <title>컨테이너로 묶어서 올리기</title>
+      <link>/tic-tac-toe/configure_ecr/make_containers_and_push/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_ecr/make_containers_and_push/</guid>
+      <description>각 프로젝트에 필요한 환경을 다운로드 받습니다. 아래 명령어를 복사하여 Cloud9 터미널에 입력합니다.
+cd ~/environment/tic-tac-toe-workshop/server/matchmaker/ npm install cd ~/environment/tic-tac-toe-workshop/server/tic-tac-toe/ npm install cd ~/environment/tic-tac-toe-workshop/client/dashboard/ npm install cd ~/environment/tic-tac-toe-workshop/client/tic-tac-toe/ npm install   전체 프로젝트를 구성하는데 몇분정도 시간이 소요됩니다.
+ Cloud9 워크샵 터미널에서 다음 명령어를 입력합니다.
+cd ~/environment/tic-tac-toe-workshop/server/matchmaker/ ./build.sh   matchmaker 프로젝트를 빌드하고 컨테이너로 묶어서 ECR에 올라가는것을 볼 수 있습니다. 최초의 이미지 빌드와 푸시에는 시간이 오래 걸리지만 이후에는 캐시를 이용해서 매우 빠르게 진행됩니다.</description>
+    </item>
+    
+    <item>
+      <title>프로젝트 알아보기</title>
+      <link>/tic-tac-toe/configure_ecr/container_detail/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/configure_ecr/container_detail/</guid>
+      <description>잠시 쉬어가며, 각 프로젝트와 컨테이너를 알아봅니다.
+Dashboard
+리액트로 만들어진 대시보드 겸 클라이언트 본체 입니다. 게임 클라이언트로 비유하자면 로비에서 채팅을 하거나 상점을 보거나 하는 상태를 대표합니다. 대시보드로써는 현재 떠 있는 데디 서버의 리스트와 상태, 몇가지 명령을 내릴 수 있습니다.
+빌드 후엔 단순한 웹페이지인데 nginx로 컨텐이너화 시켜서 스태틱 파일을 배포하게 됩니다. server/Dockerfile을 참고하세요.
+MatchMaker
+node.js로 만들어진 통합서버 입니다. 대시보드의 서버이기도 하고 매치 메이커기도 하고 모니터링 서버이기도 합니다. node.js 의 서버 기능으로 Restful API 서비스를 제공하고 WebSocket 서비스를 합니다.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>데디 서버 운영 테스트 on ECS HoL</title>
+    <link>/tic-tac-toe/run_dedi_servers/</link>
+    <description>Recent content in 데디 서버 운영 테스트 on ECS HoL</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>kr-ko</language>
+    <lastBuildDate>Tue, 07 Aug 2018 08:30:11 -0700</lastBuildDate>
+    
+	<atom:link href="/tic-tac-toe/run_dedi_servers/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>서버 준비 하기</title>
+      <link>/tic-tac-toe/run_dedi_servers/run_task/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/run_dedi_servers/run_task/</guid>
+      <description>작업 실행  ECS/Cluster/tic-tac-toe-cluster 로 들어갑니다. 탭 메뉴에서 Tasks를 선택햅니다. Run new Task를 선택합니다. 아래 내용으로 작업을 입력합니다.  Launch type: EC2
+Task Definition: tic-tac-toe-server:1
+Number of tasks: 10
+나머지 값은 기본으로 둡니다.
+Run Task을 선택합니다.
+실행 결과 잠시 후 게임 서버들이 실행되는것을 볼 수 있습니다. 새로고침아이콘을 눌러 상태를 갱신해서 볼 수 있습니다.
+모든 작업의 상태가 RUNNING이 되기를 기다립니다.
+클라우드 맵에서 확인하기  AWS Cloud Map 서비스로 갑니다. tic-tac-toe/dedi-server를 선택합니다.</description>
+    </item>
+    
+    <item>
+      <title>게임 서버를 파게이트로 띄우기</title>
+      <link>/tic-tac-toe/run_dedi_servers/run_fargate/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/run_dedi_servers/run_fargate/</guid>
+      <description>앞서 게임서버는 EC2 타입의 작업으로 띄웠습니다. EC2 타입은 EC2 클러스터를 필요로 합니다. 이번에는 서버리스 타입인 파게이트로 게임서버를 만들어서 띄워보겠습니다.
+작업 정의 추가  ECS/Task Definitions/tic-tac-toe-server 를 선택합니다. 가장 최근 리비전을 선택합니다. (문서대로 왔다면 tic-tac-toe-server:1) 입니다. 상단의 Create new revision 을 선택합니다. 몇가지만 바꿔서 Fargate타입으로 바꿉니다. 아래 내용을 입력하세요.  Task Definition Name: tic-tac-toe-server-fargate
+Network Mode: awsvpc
+Requires compatibilities: FARGATE 만 선택
+Task memory: 0.5GB
+Task CPU: 0.25 vCPU
+하단의 Create 선택</description>
+    </item>
+    
+    <item>
+      <title>게임 실행 하기</title>
+      <link>/tic-tac-toe/run_dedi_servers/run_game/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/run_dedi_servers/run_game/</guid>
+      <description>게임 실행 대시보드 화면을 3개 띄웁니다. 2개는 게임을 할 것이고, 1개는 이 상황을 모니터링 할 것입니다.
+ 대시보드상에서 좌측 사이드 메뉴의 게임을 선택합니다. START GAME 선택합니다. 또 다른 브라우저에서 동일하게 START_GAME 을 선택합니다. 매칭은 최대 30초간 기다리므로 30초 이내에 2개의 브라우저에서 참여해세요.  게임 화면 매칭이 성사되면 양 브라우저에서 게임이 실행됩니다. 양쪽 모두 화면을 터치하여 게임에 참여하면 게임이 시작됩니다.
+모니터링 또다른 대시보드로 이동합니다. 모니터링 메뉴로 이동하여 다른 브라우저에 게임할때 상황을 지켜보면 활성화 된 게임서버와 대기중인 게임서버, 그리고 게임이 끝나고 사라지는 게임서버를 볼 수 있습니다.</description>
+    </item>
+    
+    <item>
+      <title>개선 사항</title>
+      <link>/tic-tac-toe/run_dedi_servers/end_workshop/</link>
+      <pubDate>Tue, 07 Aug 2018 08:30:11 -0700</pubDate>
+      
+      <guid>/tic-tac-toe/run_dedi_servers/end_workshop/</guid>
+      <description>모든 워크샵을 마쳤습니다. 축하합니다. 모든 워크샵을 마쳤습니다.
+게임 플레이와 데디 서버의 상태를 여러가지로 만져보며 테스트 해보시기 바랍니다.
+각 프로젝트의 Dockerfile과 entrypoint 파일도 살펴보시기 바랍니다.
+개선사항  대시보드와 클라이언트의 경우 Nginx를 이용한 단순 웹서버 입니다. 이 경우 컨테이너보다는 S3의 웹호스팅과 CloudFront 조합이 낫습니다. 실습에서 ALB를 3개를 만들었습니다. ALB는 경로기반 라우팅이 가능합니다. 따라서 우리가 만든 3개의 ALB를 하나로 합칠 수 있습니다. 실습에서는 빠져있지만 도메인을 가지고 있다면 클라우드 맵과 연동하여 여러 부분을 편리하게 만들 수 있습니다.</description>
+    </item>
+    
+  </channel>
+</rss>

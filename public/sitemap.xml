@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_alb/check_vpc/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_cloudmap/check_vpc/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_service/make_service_dashboard/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/run_dedi_servers/run_task/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_ecr/make_first_ecr/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/account/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/build_cluster/iamrole/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/iamrole/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/build_cluster/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/run_dedi_servers/run_fargate/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/run_dedi_servers/run_game/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_ecr/make_others_ecr/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_service/make_service_client/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/build_cluster/build_cluster/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_service/make_service_matchmaker/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_alb/make_matchmaker_target_group/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_cloudmap/make_target_group/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/build_cluster/edit_sg/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_alb/make_other_target_groups/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_service/make_service_done/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_ecr/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_ecr/make_containers_and_push/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_cloudmap/make_cloudmap/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/workspace/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_alb/make_albs/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/make_task_defi_1/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_ecr/container_detail/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/make_task_defi_2/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/make_task_defi_3/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/make_task_defi_4/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_alb/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/run_dedi_servers/end_workshop/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/rebuild_dashboard/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/installtools/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/iamrole/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/ec2instance/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_task_definition/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/workspaceiam/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/sshkey/</loc>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_cloudmap/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/configure_service/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tic-tac-toe/run_dedi_servers/</loc>
+    <lastmod>2018-08-07T08:30:11-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/cleanup/</loc>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/example_cf_templates/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/eu-west-1/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/us-east-2/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/us-west-2/</loc>
+  </url>
+  
+  <url>
+    <loc>/prerequisites/ap-southeast-1/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
