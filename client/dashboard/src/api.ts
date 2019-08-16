@@ -12,6 +12,16 @@ interface socketParam {
   onUpdateVars: (vars: VarStore) => void,
 }
 
+function makeid(length: number) {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 function ioConnect({ onUpdateUsers, onUpdateServers, onUpdateVars }: socketParam) {
   const socket = io(apiServer, {
     transports: [ 'websocket' ]
@@ -59,6 +69,12 @@ function desireIdleServerCount(number: number) {
   });
 }
 
+function stopDediServer(addr: string) {
+  return instance.post('/stopDediServer', {
+    addr
+  });
+}
+
 function activeDediServer(addr: string) {
   return axios.get(`http://${addr}/active`, {
     timeout: 2000
@@ -77,5 +93,6 @@ export default {
   requestMatching,
   activeDediServer,
   blockDediServer,
+  stopDediServer,
   desireIdleServerCount
 }

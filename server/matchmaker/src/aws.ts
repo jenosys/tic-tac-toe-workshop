@@ -16,7 +16,7 @@ if (env.AWS_ACCESS_KEY_ID && env.AWS_SECRET_ACCESS_KEY) {
 }
 
 if (!process.env.AWS_REGION) {
-  AWS.config.update({ region: 'ap-northeast-2' });
+  AWS.config.update({ region: env.AWS_REGION });
 }
 
 export default AWS;

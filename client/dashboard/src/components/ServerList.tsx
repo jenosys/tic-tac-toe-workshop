@@ -6,6 +6,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import BLockIcon from '@material-ui/icons/Block';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import StopIcon from '@material-ui/icons/Stop';
 import { useTheme } from '@material-ui/styles';
 import React from 'react';
 import api from '../api';
@@ -67,6 +68,14 @@ function ServerCard({ server, control }: ServerCardProps) {
     });
   };
 
+  function onClickStop() {
+    let promise = api.stopDediServer(server.addr);
+
+    promise.then((result) => {
+      console.log(result);
+    });
+  }
+
   return (
     <Grid item xs={3}>
       {/* <Paper className={classes.paper}>{server.addr}</Paper> */}
@@ -90,6 +99,9 @@ function ServerCard({ server, control }: ServerCardProps) {
             <div className={classes.controls}>
               <IconButton aria-label="play" onClick={onClickActive}>
                 <PlayArrowIcon className={classes.icon} />
+              </IconButton>
+              <IconButton aria-label="stop" onClick={onClickStop}>
+                <StopIcon className={classes.icon} />
               </IconButton>
               <IconButton aria-label="block" onClick={onClickBlock}>
                 <BLockIcon className={classes.icon} />

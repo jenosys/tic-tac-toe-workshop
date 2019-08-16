@@ -13,11 +13,11 @@ interface Env {
 const env: Env = {
     NODE_ENV: (process.env.NODE_ENV || 'development') as Env['NODE_ENV'],
     IS_IN_ECS: !!process.env.ECS_CONTAINER_METADATA_URI,
-    AWS_REGION: process.env.AWS_REGION || 'ap-northeast-2',
+    AWS_REGION: process.env.AWS_REGION || 'us-west-2',
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
 
-    ECS_CLUSTER_NAME: process.env.ECS_CLUSTER_NAME || 'dedi-server-cluster',
+    ECS_CLUSTER_NAME: process.env.ECS_CLUSTER_NAME || 'tic-tac-toe-cluster',
     ECS_TASK_DEFINITION: process.env.ECS_TASK_DEFINITION || 'tic-tac-toe:11',
 };
 

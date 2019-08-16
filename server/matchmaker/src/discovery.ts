@@ -2,17 +2,17 @@ import axios from 'axios';
 import interval from 'interval-promise';
 
 import AWS from './aws';
-import { IoTJobsDataPlane } from 'aws-sdk';
 
 
 export interface DediServer {
   id: string;
   ipv4: string;
   port: number;
-  state: 'ready' | 'bind' | 'busy' | 'unhealthy';
+  state: 'ready' | 'bind' | 'busy';
   taskArn: string;
   launchType: 'EC2' | 'FARGATE';
   image: string;
+  status: 'unknown' | 'healthy' | 'unhealthy';
 }
 
 const NAMESPACE_NAME = 'tic-tac-toe';
@@ -111,7 +111,8 @@ class Discovery {
             state: ins.Attributes!.STATE as DediServer['state'],
             launchType: ins.Attributes!.LAUNCH_TYPE as DediServer['launchType'],
             taskArn: ins.Attributes!.TASK_ARN,
-            image: ins.Attributes!.IMAGE
+            image: ins.Attributes!.IMAGE,
+            status: 'unhealthy'
           });
         });
 
@@ -123,37 +124,22 @@ class Discovery {
 
     let mixedArray = await Promise.all(
       array.map(srv => new Promise<DediServer | undefined>(resolve => {
-        if (srv.state === 'unhealthy') { resolve(srv); }
-
         axios.get(`http://${srv.ipv4}:${srv.port}/health`, { timeout: 2000 })
           .then(() => {
+            srv.status = "healthy";
             resolve(srv);
           })
           .catch(error => {
+            srv.status = 'unhealthy';
             resolve(srv);
 
-            this.updateState(srv, 'unhealthy');
-
-            // this.sd.deregisterInstance({
-            //   InstanceId: srv.id,
-            //   ServiceId: this.svcId
-            // }, (err, data) => {
-            //   if (err) {
-            //     console.log(err, err.stack);
-            //   }
-            // });
-
             console.error(error);
-            console.log(`dedi server(${srv.id}, ${srv.ipv4}:${srv.port}) doesn't respond`);
+            console.log(`dedi server(${srv.ipv4}:${srv.port}) doesn't respond`);
           });
       }))
     );
 
     this._servers = mixedArray as DediServer[];
-
-    // this._servers = mixedArray.filter(elem => !!elem) as DediServer[];
-
-    // console.log(this._servers);
   }
 
   getIdleAndBind() {
@@ -165,7 +151,7 @@ class Discovery {
     return selected;
   }
 
-  private updateState(server: DediServer, state: 'ready' | 'busy' | 'bind' | 'unhealthy') {
+  private updateState(server: DediServer, state: 'ready' | 'busy' | 'bind') {
     let promise = this.sd.registerInstance({
       Attributes: {
         'AWS_INSTANCE_IPV4': server.ipv4,
@@ -180,6 +166,17 @@ class Discovery {
     }).promise();
 
     return promise;
+  }
+
+  remove(server: DediServer) {
+    this.sd.deregisterInstance({
+      InstanceId: server.id,
+      ServiceId: this.svcId
+    }, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      }
+    });
   }
 }
 

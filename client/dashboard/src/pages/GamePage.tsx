@@ -117,14 +117,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  user: UserStore[];
+  users: UserStore[];
+  myname: string;
 }
 
-function GamePage(props: Props) {
+function GamePage({ myname, users }: Props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const rows = props.user.sort((a, b) => b.score - a.score);
+  const rows = users.sort((a, b) => b.score - a.score);
   // const rows: UserStore[] = [];
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
@@ -153,10 +154,10 @@ function GamePage(props: Props) {
           유저 정보
         </Typography>
         <Typography component="p">
-          ID: {'jaeseok'}
+          ID: {myname}
         </Typography>
         <Typography component="p">
-          Score: {1234}
+          Score: {1000}
         </Typography>
         <GameModal />
       </Paper>

@@ -19,7 +19,7 @@ export class ContainerManager {
     if (number > readyCount) {
       return this.runTasks(number - readyCount);
     } else if (number < readyCount) {
-      return this.stopTasks(readyTasks.randomPick(readyCount - number));
+      return this.stopTasks(readyTasks.randomPick(readyCount - number), 'too many idle servers');
     }
   }
 
@@ -44,7 +44,11 @@ export class ContainerManager {
     return Promise.all(promises);
   }
 
-  stopTasks(tasks: DediServer[]) {
+  stopTask(task: DediServer, reason?: string) {
+    return this.stopTasks([ task ]);
+  }
+
+  stopTasks(tasks: DediServer[], reason?: string) {
     if (!tasks.length) { return; }
 
     let promise = Promise.all(
@@ -52,7 +56,7 @@ export class ContainerManager {
         return this.ecs.stopTask({
           task: task.taskArn,
           cluster: env.ECS_CLUSTER_NAME,
-          reason: 'too many tasks'
+          reason: reason || 'unspecified'
         }).promise();
       })
     );

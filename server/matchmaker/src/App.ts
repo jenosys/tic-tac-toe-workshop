@@ -12,6 +12,7 @@ import discovery from './discovery';
 import containerManager from './containerManager';
 import matchMaker from './matchMaker';
 import * as util from './util';
+import { resolveSrv } from 'dns';
 
 interface User {
 	name?: string;
@@ -124,6 +125,7 @@ class App {
 
 		router.get('/health', this.wrap(this.onHealthCheck));
 		router.post('/idleServerCount', this.wrap(this.idleServerCount));
+		router.post('/stopDediServer', this.wrap(this.stopDediServer));
 		router.post('/requestMatching', this.wrap(this.requestMatching));
 
 		this.app.use('/api', router);
@@ -202,6 +204,19 @@ class App {
 				this.io.emit('vars', this.vars);
 			});
 		}
+
+		return HTTP_STATUS_CODES.OK;
+	}
+
+	private async stopDediServer(req: express.Request) {
+		const { addr } = req.body;
+		
+		let server = discovery.servers.find(srv => `${srv.ipv4}:${srv.port}` === addr);
+
+		if (!server) { return 'not exist'; }
+
+		containerManager.stopTask(server);
+		discovery.remove(server);
 
 		return HTTP_STATUS_CODES.OK;
 	}

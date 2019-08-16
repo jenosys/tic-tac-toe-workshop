@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
     slider: {
       width: 300,
       margin: theme.spacing(1)
+      
     },
     toolbar: {
       display: 'flex',
@@ -53,14 +54,14 @@ export default function ServerPage({ servers, idleServerCount }: Props) {
         <Typography id="discrete-slider" gutterBottom>
           대기 서버 개수 설정
       </Typography>
-        <Slider
+        <Slider 
           defaultValue={idleServerCount}
           getAriaValueText={valuetext}
           aria-labelledby="discrete-slider"
           valueLabelDisplay="auto"
           step={5}
           marks
-          min={5}
+          min={0}
           max={50}
           value={idleServerCount}
           onChangeCommitted={onChangeIdleServerNumber}

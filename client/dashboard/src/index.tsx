@@ -6,6 +6,8 @@ import App from './App';
 import rootReducer from './store/modules';
 // import { addServer, removeServer, updateServer } from './store/modules/servers';
 // import { addUser, removeUser } from './store/modules/users';
+// import { setAuth } from './store/modules/data';
+// import api from './api';
 
 
 
@@ -19,6 +21,7 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root'),
 );
+
 
 // // If you want your app to work offline and load faster, you can change
 // // unregister() to register() below. Note this comes with some pitfalls.
