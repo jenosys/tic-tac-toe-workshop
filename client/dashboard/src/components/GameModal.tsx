@@ -63,7 +63,7 @@ export interface SimpleDialogProps {
 let requestKey = '';
 
 function SimpleDialog(props: SimpleDialogProps) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { onClose, open } = props;
   const [phase, setPhase] = React.useState('init'); // init, requested, responded
   const [delay, setDelay] = React.useState(1000);

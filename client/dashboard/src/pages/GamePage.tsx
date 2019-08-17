@@ -118,10 +118,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   users: UserStore[];
-  myname: string;
+  username: string;
 }
 
-function GamePage({ myname, users }: Props) {
+function GamePage({ username, users }: Props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -154,7 +154,7 @@ function GamePage({ myname, users }: Props) {
           유저 정보
         </Typography>
         <Typography component="p">
-          ID: {myname}
+          ID: {username}
         </Typography>
         <Typography component="p">
           Score: {1000}

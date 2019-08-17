@@ -20,6 +20,6 @@ class GamePageContainer extends React.Component<Props> {
 export default connect(
   (state: RootStore) => ({
     servers: state.servers,
-    idleServerCount: state.data.desireIdleSrvCnt
+    idleServerCount: state.vars.idleServerNumber
   }) as Props,
 )(GamePageContainer);

@@ -13,7 +13,7 @@ export class ContainerManager {
 
 
   ensureReadyTaskNumber(number: number) {
-    let readyTasks = discovery.servers.filter(srv => srv.state === 'ready');
+    let readyTasks = discovery.servers.filter(srv => srv.state === 'ready' && srv.status === 'healthy');
     let readyCount = readyTasks.length;
 
     if (number > readyCount) {

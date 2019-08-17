@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import data from './data';
+import vars from './vars';
 import users from './users';
 import servers from './servers';
 
 const reducer = combineReducers({
-  data,
+  vars,
   users,
   servers
 });

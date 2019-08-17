@@ -18,7 +18,7 @@ const env: Env = {
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
 
     ECS_CLUSTER_NAME: process.env.ECS_CLUSTER_NAME || 'tic-tac-toe-cluster',
-    ECS_TASK_DEFINITION: process.env.ECS_TASK_DEFINITION || 'tic-tac-toe:11',
+    ECS_TASK_DEFINITION: process.env.ECS_TASK_DEFINITION || 'tic-tac-toe-server',
 };
 
 export default env;

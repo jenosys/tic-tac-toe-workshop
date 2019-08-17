@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import Grade from '@material-ui/icons/Grade';
 import MenuIcon from '@material-ui/icons/Menu';
 import Timeline from '@material-ui/icons/Timeline';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';

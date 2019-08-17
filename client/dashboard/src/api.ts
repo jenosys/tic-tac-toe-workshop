@@ -10,25 +10,42 @@ interface socketParam {
   onUpdateUsers: (users: UserStore[]) => void,
   onUpdateServers: (servers: ServerStore[]) => void,
   onUpdateVars: (vars: VarStore) => void,
+  onUpdateUsername: (username: string) => void
 }
 
-function makeid(length: number) {
-  var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
+function makeid(length: number): string {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
 }
 
-function ioConnect({ onUpdateUsers, onUpdateServers, onUpdateVars }: socketParam) {
+let username = sessionStorage.getItem('tic-tac-toe-username');
+
+if (username == null) {
+  username = makeid(7);
+  localStorage.setItem('tic-tac-toe-username', username);
+}
+
+
+function ioConnect({ onUpdateUsers, onUpdateServers, onUpdateVars, onUpdateUsername }: socketParam) {
+
+  onUpdateUsername(username!);
+
   const socket = io(apiServer, {
-    transports: [ 'websocket' ]
+    transports: ['websocket']
   });
+
 
   socket.on('connect', () => {
     console.log('socket connected');
+
+    socket.emit('username', username);
+
+
   });
 
   socket.on('disconnect', () => {
@@ -38,11 +55,11 @@ function ioConnect({ onUpdateUsers, onUpdateServers, onUpdateVars }: socketParam
   socket.on('users', (users: UserStore[]) => {
     onUpdateUsers(users);
   });
-  
+
   socket.on('servers', (servers: ServerStore[]) => {
     onUpdateServers(servers);
   });
-  
+
   socket.on('vars', (vars: VarStore) => {
     onUpdateVars(vars);
   })
@@ -59,8 +76,8 @@ function requestMatching(username: string) {
   return instance.post('/requestMatching', {
     username
   }, {
-    timeout: 40000
-  });
+      timeout: 40000
+    });
 }
 
 function desireIdleServerCount(number: number) {

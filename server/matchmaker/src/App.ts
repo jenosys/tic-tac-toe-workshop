@@ -50,8 +50,6 @@ class App {
 	private server: http.Server;
 	private io: SocketIO.Server;
 
-	private timedJob: NodeJS.Timeout;
-
 	private users: User[] = [];
 	private vars: Var = {
 		idleServerNumber: 10
@@ -72,7 +70,13 @@ class App {
 		this.app.use(bodyParser.json());
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use((req, res, next) => {
-			console.log(`${req.method} ${req.originalUrl}`);
+			let param = {};
+			if (req.method === 'GET') {
+				param = req.query;
+			} else {
+				param = req.body;
+			}
+			console.log(`${req.method} ${req.originalUrl} ${JSON.stringify(param)}`);
 			next();
 		});
 
@@ -89,19 +93,12 @@ class App {
 
 		this.vars.idleServerNumber = discovery.readyCount;
 
-		this.timedJob = setInterval(() => {
-			let now = moment().unix();
-
+		setInterval(() => {
 			this.broadcast();
-
-			// ensure ready server count
-			// if (discovery.readyCount < this.vars.idleServerNumber && this.nextAskTime < now) {
-			// 	containerManager.ensureReadyTaskNumber(this.vars.idleServerNumber);
-			// 	this.nextAskTime = moment.unix(now).add(2, 'minutes').unix();
-			// } else if (this.nextAskTime && discovery.readyCount >= this.vars.idleServerNumber) {
-			// 	this.nextAskTime = 0;
-			// }
-		}, 1000);
+		}, moment.duration(3, 'seconds').asMilliseconds());
+		setInterval(() => {
+			containerManager.ensureReadyTaskNumber(this.vars.idleServerNumber);
+		}, moment.duration(2, 'minutes').asMilliseconds());
 	}
 
 	private wrap(fn: (req: express.Request) => Promise<any>): express.RequestHandler {
@@ -131,15 +128,18 @@ class App {
 
 		this.app.use('/api', router);
 
-		
+
 		this.io.sockets.on('connection', socket => {
-			this.users.push({
-				name: util.randomString(6),
-				score: 1123,
-				socket
-			});
 
 			console.log(`new connection. socket(${socket.id}) total user count: ${this.users.length}`);
+
+			socket.on('username', username => {
+				this.users.push({
+					name: username,
+					score: 1000,
+					socket
+				});
+			});
 
 			socket.on('disconnect', () => {
 				let idx = this.users.findIndex(u => u.socket === socket);
@@ -196,23 +196,20 @@ class App {
 
 	private async idleServerCount(req: express.Request) {
 		const { number } = req.body;
+		
 		if (this.vars.idleServerNumber === number) { return; }
+		this.vars.idleServerNumber = number;
 
-		let promise = containerManager.ensureReadyTaskNumber(number) as Promise<any>;
+		containerManager.ensureReadyTaskNumber(number);
 
-		if (promise) {
-			promise.then(() => {
-				this.vars.idleServerNumber = number;
-				this.io.emit('vars', this.vars);
-			});
-		}
-
+		this.io.emit('vars', this.vars);
+		
 		return HTTP_STATUS_CODES.OK;
 	}
 
 	private async stopDediServer(req: express.Request) {
 		const { addr } = req.body;
-		
+
 		let server = discovery.servers.find(srv => `${srv.ipv4}:${srv.port}` === addr);
 
 		if (!server) { return 'not exist'; }
@@ -225,7 +222,7 @@ class App {
 
 	private async requestMatching(req: express.Request) {
 		const { username } = req.body;
-		
+
 		try {
 			let result = await matchMaker.addPlayer(username);
 

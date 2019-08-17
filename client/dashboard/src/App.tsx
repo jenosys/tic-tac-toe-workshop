@@ -8,7 +8,7 @@ import GamePageContainer from './containers/GamePageContainer';
 import MainMenuContainer from './containers/MainMenuContainer';
 import ServerPageContainer from './containers/ServerPageContainer';
 import LeaderboardPage from './pages/LeaderboardPage';
-import { setDesireIdleSrvCnt } from './store/modules/data';
+import { setIdleServerNumber, setUsername } from './store/modules/vars';
 import { replaceServers } from './store/modules/servers';
 import { replaceUsers } from './store/modules/users';
 
@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   onUpdateUsers: (users: UserStore[]) => void,
   onUpdateServers: (servers: ServerStore[]) => void,
-  onUpdateVars: (vars: VarStore) => void
+  onUpdateVars: (vars: VarStore) => void,
+  onUpdateUsername: (username: string) => void
 }
 
 function App(props: Props) {
@@ -49,7 +50,8 @@ function App(props: Props) {
     api.ioConnect({
       onUpdateUsers: props.onUpdateUsers,
       onUpdateServers: props.onUpdateServers,
-      onUpdateVars: props.onUpdateVars
+      onUpdateVars: props.onUpdateVars,
+      onUpdateUsername: props.onUpdateUsername
     });
   });
 
@@ -73,7 +75,8 @@ export default connect(
     return {
       onUpdateUsers: (users: UserStore[]) => { dispatch(replaceUsers(users)) },
       onUpdateServers: (servers: ServerStore[]) => { dispatch(replaceServers(servers)) },
-      onUpdateVars: (vars: VarStore) => { dispatch(setDesireIdleSrvCnt(vars.idleServerNumber)) }
+      onUpdateVars: (vars: VarStore) => { dispatch(setIdleServerNumber(vars.idleServerNumber)) },
+      onUpdateUsername: (username: string) => { dispatch(setUsername(username)) }
     }
   }
 )(App);

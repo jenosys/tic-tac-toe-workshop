@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import BLockIcon from '@material-ui/icons/Block';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
-import { useTheme } from '@material-ui/styles';
 import React from 'react';
 import api from '../api';
 
@@ -50,7 +49,6 @@ interface ServerCardProps {
 
 function ServerCard({ server, control }: ServerCardProps) {
   const classes = useStyles1();
-  const theme = useTheme();
 
   function onClickActive() {
     let promise = api.activeDediServer(server.addr);

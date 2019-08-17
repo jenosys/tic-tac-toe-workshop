@@ -2,8 +2,8 @@ interface ActionBase {
   type: string;
 }
 
-interface AuthActionType extends ActionBase {
-  type: 'data/AUTH' | 'data/DESIRE_IDLE_SRV_CNT'
+interface VarActionType extends ActionBase {
+  type: "var/USERNAME" | 'var/IDLE_SERVER_NUMBER'
 }
 
 interface UserActionType extends ActionBase {
@@ -16,10 +16,6 @@ interface ServerActionType extends ActionBase {
 
 interface StoreBase {}
 
-interface DataSture extends StoreBase {
-  username?: string;
-  desireIdleSrvCnt: number;
-}
 
 interface UserStore extends StoreBase {
   username: string;
@@ -34,21 +30,22 @@ interface ServerStore extends StoreBase {
   status: 'healthy' | 'unhealthy';
 }
 
+interface VarStore {
+  username?: string;
+  idleServerNumber: number;
+}
+
 interface RootStore {
-  data: DataSture;
+  vars: VarStore;
   users: UserStore[];
   servers: ServerStore[];
 };
 
 
-interface VarStore {
-  idleServerNumber: number;
-}
-
 type SingleAction<Type extends ActionBase, Store extends StoreBase> = Type & Partial<Store>;
 type GroupAction<Type extends ActionBase, Store extends StoreBase> = Type & Store[];
 
 
-type DataAction = SingleAction<AuthActionType, DataSture>;
+type VarAction = SingleAction<VarActionType, VarStore>;
 type UserAction = Action<UserActionType, UserStore> | GroupAction<UserActionType, UserStore>;
 type ServerAction = Action<ServerActionType, ServerStore>;

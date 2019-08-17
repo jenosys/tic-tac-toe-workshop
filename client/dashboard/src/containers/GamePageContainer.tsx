@@ -4,15 +4,15 @@ import GamePage from '../pages/GamePage';
 
 interface Props {
   users: UserStore[];
-  myname: string;
+  username: string;
 }
 
 class GamePageContainer extends React.Component<Props> {
   render() {
-    const { users, myname } = this.props;
+    const { users, username } = this.props;
 
     return (
-      <GamePage users={users} myname={myname}/>
+      <GamePage users={users} username={username}/>
     )
   }
 };
@@ -20,6 +20,6 @@ class GamePageContainer extends React.Component<Props> {
 export default connect(
   (state: RootStore) => ({
     users: state.users,
-    myname: state.data.username
+    username: state.vars.username
   }) as Props,
 )(GamePageContainer);
