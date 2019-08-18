@@ -140,9 +140,9 @@ export default withRouter(function MainMenu(props: any) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
-            HoL 통합 클라이언트
+            틱택토 통합 대시보드
           </Typography>
-          {auth && (
+          {/* {auth && (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -172,7 +172,7 @@ export default withRouter(function MainMenu(props: any) {
                 <MenuItem onClick={handleAccountClose}>My account</MenuItem>
               </Menu>
             </div>
-          )}
+          )} */}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -223,7 +223,7 @@ export default withRouter(function MainMenu(props: any) {
             <ListItemText primary={'리더보드'} />
           </ListItem> */}
         </List>
-      </Drawer>      
+      </Drawer>
     </div>
   );
 });

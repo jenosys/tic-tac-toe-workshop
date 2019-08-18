@@ -3,18 +3,14 @@
 set -e
 
 if [[ $ECS_CONTAINER_METADATA_URI ]]; then
-    # is in ecs
-    # echo "test"
-
+    # launched in ecs
     META_RESULT=$(curl --silent --connect-timeout 2 ${ECS_CONTAINER_METADATA_URI}/task | jq -r '.Cluster, .TaskARN')
     CLUSTER=$(echo ${META_RESULT} | cut -f 1 -d ' ')
     TASK_ARN=$(echo ${META_RESULT} | cut -f 2 -d ' ')
 
-    # TASK_RESULT=$(aws ecs describe-tasks --cluster ${CLUSTER} --tasks ${TASK_ARN} | jq -r .)
-    # TASK_RESULT=$(aws ecs describe-tasks --cluster ${CLUSTER} --tasks ${TASK_ARN} | jq -r '.tasks[0].launchType, .tasks[0].taskDefinitionArn, .tasks[0].containers[0].networkBindings[0].hostPort')
     LAUNCH_TYPE=$(aws ecs describe-tasks --cluster ${CLUSTER} --tasks ${TASK_ARN} | jq -r '.tasks[0].launchType')
-    TASK_DEFINITION=$(aws ecs describe-tasks --cluster ${CLUSTER} --tasks ${TASK_ARN} | jq -r '.tasks[0].taskDefinitionArn')    
-    
+    TASK_DEFINITION=$(aws ecs describe-tasks --cluster ${CLUSTER} --tasks ${TASK_ARN} | jq -r '.tasks[0].taskDefinitionArn')
+
     TASK_DEFINITION_RESULT=$(aws ecs describe-task-definition --task-definition $TASK_DEFINITION | jq -r '.taskDefinition.family, .taskDefinition.revision')
     FAMILY=$(echo $TASK_DEFINITION_RESULT | cut -f 1 -d ' ')
     REVISION=$(echo $TASK_DEFINITION_RESULT | cut -f 2 -d ' ')
@@ -29,7 +25,7 @@ if [[ $ECS_CONTAINER_METADATA_URI ]]; then
         HOST_IP=$(aws ec2 describe-network-interfaces --network-interface-ids $ENI | jq -r '.NetworkInterfaces[0].PrivateIpAddresses[0].Association.PublicIp')
         HOST_PORT=$(aws ecs describe-task-definition --task-definition $TASK_DEFINITION | jq -r .taskDefinition.containerDefinitions[0].portMappings[0].hostPort)
     fi
-    
+
 
     echo "CLUSTER: $CLUSTER"
     echo "TASK_ARN: $TASK_ARN"
