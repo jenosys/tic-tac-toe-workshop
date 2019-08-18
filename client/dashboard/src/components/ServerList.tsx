@@ -22,6 +22,7 @@ const useStyles1 = makeStyles((theme: Theme) =>
 
     card: {
       display: 'flex',
+      minWidth: '260px'
     },
     details: {
       display: 'flex',
@@ -75,7 +76,7 @@ function ServerCard({ server, control }: ServerCardProps) {
   }
 
   return (
-    <Grid item xs={3}>
+    <Grid item xs='auto'>
       <Card className={classes.card}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
