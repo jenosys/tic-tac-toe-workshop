@@ -52,13 +52,12 @@ class App {
 
 	private users: User[] = [];
 	private vars: Var = {
-		idleServerNumber: 10
+		idleServerNumber: 0
 	};
 	private sendableData: Sendable = {
 		users: [],
 		servers: []
 	};
-	private nextAskTime: number = 0;
 
 
 
@@ -91,14 +90,11 @@ class App {
 
 		console.log(`server listen on ${host}:${port}`);
 
-		this.vars.idleServerNumber = discovery.readyCount;
+		this.vars.idleServerNumber = containerManager.desiredIdleNumber = discovery.readyCount;
 
 		setInterval(() => {
 			this.broadcast();
 		}, moment.duration(3, 'seconds').asMilliseconds());
-		setInterval(() => {
-			containerManager.ensureReadyTaskNumber(this.vars.idleServerNumber);
-		}, moment.duration(2, 'minutes').asMilliseconds());
 	}
 
 	private wrap(fn: (req: express.Request) => Promise<any>): express.RequestHandler {
@@ -197,10 +193,9 @@ class App {
 	private async idleServerCount(req: express.Request) {
 		const { number } = req.body;
 		
-		if (this.vars.idleServerNumber === number) { return; }
+		if (containerManager.desiredIdleNumber === number) { return; }
+		containerManager.desiredIdleNumber = number;
 		this.vars.idleServerNumber = number;
-
-		containerManager.ensureReadyTaskNumber(number);
 
 		this.io.emit('vars', this.vars);
 		

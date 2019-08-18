@@ -42,7 +42,6 @@ export default function ServerPage({ servers, idleServerCount }: Props) {
   }
 
   function onChangeIdleServerNumber(event: any, number: number | number[]) {
-    console.log(number);
     api.desireIdleServerCount(number as number);
   }
 

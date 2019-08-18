@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import interval from 'interval-promise';
 
 import AWS from './aws';
@@ -87,7 +88,7 @@ class Discovery {
 
     interval(async () => {
       await this.refresh();
-    }, 5000);
+    }, moment.duration(4, 'seconds').asMilliseconds());
   }
 
   private async refresh() {
