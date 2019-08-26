@@ -20,18 +20,6 @@ if [[ $ECS_CONTAINER_METADATA_URI ]]; then
     FAMILY=$(echo $TASK_DEFINITION_RESULT | cut -f 1 -d ' ')
     REVISION=$(echo $TASK_DEFINITION_RESULT | cut -f 2 -d ' ')
 
-    echo "CLUSTER: $CLUSTER"
-    echo "TASK_ARN: $TASK_ARN"
-    echo "HOST_IP: $HOST_IP"
-    echo "HOST_PORT: $HOST_PORT"
-    echo "LAUNCH_TYPE: $LAUNCH_TYPE"
-    echo "FAMILY: $FAMILY"
-    echo "REVISION: $REVISION"
-
-    if [[ -z $CLUSTER || -z $TASK_ARN || -z $HOST_IP || -z $HOST_PORT  || -z $LAUNCH_TYPE || -z $FAMILY || -z $REVISION ]]; then
-        exit -1
-    fi
-
     export CLUSTER
     export TASK_ARN
     export HOST_IP

@@ -1,5 +1,5 @@
 핸즈온 랩 가이드 바로가기
-https://github.com/jenosys/tic-tac-toe-workshop-hol
+https://jenosys.github.io/tic-tac-toe-workshop-hol/
 
 # Project Name
 
