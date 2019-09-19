@@ -22,7 +22,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menuButton: {
       // marginRight: 36,
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(1),
     },
     title: {
       flexGrow: 1,
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3),
     },
     margin: {
-      margin: theme.spacing(2),
+      margin: theme.spacing(0),
     },
   }),
 );

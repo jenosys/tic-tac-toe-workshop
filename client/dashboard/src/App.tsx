@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router';
@@ -11,7 +12,7 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import { setIdleServerNumber, setUsername } from './store/modules/vars';
 import { replaceServers } from './store/modules/servers';
 import { replaceUsers } from './store/modules/users';
-
+import { ThemeProvider } from '@material-ui/styles';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+let theme = createMuiTheme();
+theme = responsiveFontSizes(theme);
+
 interface Props {
   onUpdateUsers: (users: UserStore[]) => void,
   onUpdateServers: (servers: ServerStore[]) => void,
@@ -57,15 +61,16 @@ function App(props: Props) {
 
   return (
     <div className={classes.root}>
-      <BrowserRouter>
-        <MainMenuContainer />
-        <Redirect from="/" to="/server" />
-        <Route path="/game" component={GamePageContainer} />
-        <Route path="/server" component={ServerPageContainer} />
-        <Route path="/leaderboard" component={LeaderboardPage} />
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <MainMenuContainer />
+          <Redirect from="/" to="/server" />
+          <Route path="/game" component={GamePageContainer} />
+          <Route path="/server" component={ServerPageContainer} />
+          <Route path="/leaderboard" component={LeaderboardPage} />
+        </BrowserRouter>
+      </ThemeProvider>
     </div>
-
   );
 }
 

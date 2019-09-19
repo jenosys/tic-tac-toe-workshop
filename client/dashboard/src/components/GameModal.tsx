@@ -1,4 +1,4 @@
-import { Box, createStyles, Grid, IconButton, makeStyles, Theme } from '@material-ui/core';
+import { Box, createStyles, IconButton, makeStyles, Theme, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,8 +9,8 @@ import useInterval from '@use-it/interval';
 import React, { useEffect } from 'react';
 import Iframe from 'react-iframe';
 import api from '../api';
-import * as utils from '../utils';
 import env from '../env';
+import * as utils from '../utils';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,11 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
-    },
-    progress: {
-      // margin: theme.spacing(4),
-      // left: theme.spacing(4)
-    },
+    }
   })
 );
 
@@ -62,14 +58,15 @@ export interface SimpleDialogProps {
 
 let requestKey = '';
 
+
 function SimpleDialog(props: SimpleDialogProps) {
-  // const classes = useStyles();
+  const classes = useStyles();
   const { onClose, open } = props;
   const [phase, setPhase] = React.useState('init'); // init, requested, responded
   const [delay, setDelay] = React.useState(1000);
   const [elapsedTime, setElapsedTime] = React.useState(0);
   const [serverAddr, setServerAddr] = React.useState('');
-  
+
   useEffect(() => {
     // componentDidMount
     let closeMe = (event: MessageEvent) => {
@@ -95,16 +92,16 @@ function SimpleDialog(props: SimpleDialogProps) {
 
     requestKey = key;
     setElapsedTime(0);
-    setDelay(1000);    
+    setDelay(1000);
     setPhase('requested');
-    
+
     console.log('send request');
     api.requestMatching('jaeseok').then(response => {
       if (open && key === requestKey) {
         setDelay(null as any);
         setServerAddr(response.data.serverAddr || '');
         setPhase('responded');
-        
+
       }
     });
   }
@@ -118,7 +115,7 @@ function SimpleDialog(props: SimpleDialogProps) {
     setPhase('init');
 
     requestKey = '';
-    
+
     console.log('called handleClose');
   }
 
@@ -127,27 +124,46 @@ function SimpleDialog(props: SimpleDialogProps) {
   if (phase === 'init') {
   } else if (phase === 'requested') {
     content =
-      <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-        <CircularProgress size={70} />
-        <Typography variant="h2" color="primary" align='center'>{elapsedTime}</Typography>;
-        </div>;
+      <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
+        <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+          <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+            <Grid container justify="center" alignItems="center">
+              <div>
+                <CircularProgress size={70} />
+                <Typography variant="h2" color="primary" align='center'>
+                  {elapsedTime}
+                </Typography>
+              </div>
+            </Grid>
+          </div>
+        </div>
+      </div>
   } else if (phase === 'responded' && serverAddr === '') {
     content =
-      <Typography variant="h1" color="error">
-        매칭이 실패했습니다.<br />
-        다시 시도해 주세요.
-        </Typography>;
+      <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
+        <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+          <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+            <Grid container justify="center" alignItems="center">
+              <Typography variant="h3" color="error">
+                매칭이 실패했습니다.<br />
+                다시 시도해 주세요.
+              </Typography>
+            </Grid>
+          </div>
+        </div>
+      </div >
   } else {
     content =
       <Iframe
         // url={`http://localhost:8080/?hostname=${"13.124.158.138"}%3A${32795}`}
         // url={`http://localhost:8080/?hostname=${serverAddr.replace(':', '%3A')}`}
         url={`${env.CLIENT_URL}/?hostname=${serverAddr.replace(':', '%3A')}`}
-        width="600px"
-        height="800px"
+        // styles={{ width: '100%', height: '100%' }}
+        width={'100%'}
+        height={'100%'}
         frameBorder={0}
         scrolling="no"
-      />;
+      />
   }
 
   return (
@@ -157,22 +173,12 @@ function SimpleDialog(props: SimpleDialogProps) {
       disableBackdropClick={true}
       disableEscapeKeyDown={true}
       open={open}
-      maxWidth="md"
       fullWidth={true}
+      maxWidth='md'
     >
       <DialogTitle id="simple-dialog-title" onClose={handleClose} >Tic Tac Toe {serverAddr}</DialogTitle>
-      <Box width="100%" height={550} bgcolor="text.primary" position='relative'>
-        <div style={{ zoom: 0.6 }}>
-          <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
-            <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-              <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
-                <Grid container justify="center" alignItems="center">
-                  {content}
-                </Grid>
-              </div>
-            </div>
-          </div>
-        </div>
+      <Box height="85vh" bgcolor="text.primary" position='relative'>
+        {content}
       </Box>
     </Dialog>
   );

@@ -1,18 +1,15 @@
-import path from 'path';
 import * as bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import cors from 'cors';
 import HTTP_STATUS_CODES from 'http-status-enum';
+import moment from 'moment';
 import nocache from 'nocache';
 import socketIO from 'socket.io';
 import { setInterval } from 'timers';
-import moment from 'moment';
-import discovery from './discovery';
 import containerManager from './containerManager';
+import discovery from './discovery';
 import matchMaker from './matchMaker';
-import * as util from './util';
-import { resolveSrv } from 'dns';
 
 interface User {
 	name?: string;

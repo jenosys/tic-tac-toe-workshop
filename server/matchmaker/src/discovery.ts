@@ -3,6 +3,7 @@ import moment from 'moment';
 import interval from 'interval-promise';
 
 import AWS from './aws';
+import * as util from './util';
 
 
 export interface DediServer {
@@ -143,13 +144,25 @@ class Discovery {
     this._servers = array;
   }
 
+  idx = 1;
   getIdleAndBind() {
-    let selected = this._servers.randomPick(1)[0];
+    // let selected = this._servers.randomPick(1)[0];
 
-    this._servers.splice(this._servers.indexOf(selected), 1);
-    this.updateState(selected, 'bind');
+    // this._servers.splice(this._servers.indexOf(selected), 1);
+    // this.updateState(selected, 'bind');
 
-    return selected;
+    // return selected;
+
+    return {
+      id: (++this.idx).toString(),
+      ipv4: '1.1.1.1',
+      port: 1234,
+      state: 'ready',
+      taskArn: 'test-task',
+      launchType: 'EC2',
+      image: 'test:1',
+      status: 'healthy'
+    } as DediServer;
   }
 
   private updateState(server: DediServer, state: 'ready' | 'busy' | 'bind') {
