@@ -6,7 +6,7 @@ import api from '../api';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     slider: {
-      width: 300,
+      width: 250,
       margin: theme.spacing(1)
       
     },
@@ -32,6 +32,29 @@ interface Props {
   idleServerCount: number
 }
 
+const marks = [
+  {
+    value: 0,
+    label: '0',
+  },
+  {
+    value: 25,
+    label: '25',
+  },
+  {
+    value: 50,
+    label: '50',
+  },
+  {
+    value: 75,
+    label: '75',
+  },
+  {
+    value: 100,
+    label: '100',
+  }
+];
+
 export default function ServerPage({ servers, idleServerCount }: Props) {
   const classes = useStyles();
   const idleServers = servers.filter(s => s.state === 'ready' || s.state === 'bind');
@@ -56,12 +79,11 @@ export default function ServerPage({ servers, idleServerCount }: Props) {
         <Slider 
           defaultValue={idleServerCount}
           getAriaValueText={valuetext}
-          aria-labelledby="discrete-slider"
+          aria-labelledby="discrete-slider-always"
           valueLabelDisplay="auto"
-          step={5}
-          marks
-          min={0}
-          max={50}
+          step={10}
+          marks={marks}
+          max={100}
           value={idleServerCount}
           onChangeCommitted={onChangeIdleServerNumber}
         />

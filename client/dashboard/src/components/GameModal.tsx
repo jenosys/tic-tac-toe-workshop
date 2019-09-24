@@ -11,6 +11,7 @@ import Iframe from 'react-iframe';
 import api from '../api';
 import env from '../env';
 import * as utils from '../utils';
+import { flexbox } from '@material-ui/system';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -124,33 +125,25 @@ function SimpleDialog(props: SimpleDialogProps) {
   if (phase === 'init') {
   } else if (phase === 'requested') {
     content =
-      <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
-        <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-          <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
-            <Grid container justify="center" alignItems="center">
-              <div>
-                <CircularProgress size={70} />
-                <Typography variant="h2" color="primary" align='center'>
-                  {elapsedTime}
-                </Typography>
-              </div>
-            </Grid>
+      <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+        <Grid container justify="center" alignItems="center">
+          <div>
+            <CircularProgress size={70} />
+            <Typography variant="h2" color="primary" align='center'>
+              {elapsedTime}
+            </Typography>
           </div>
-        </div>
+        </Grid>
       </div>
   } else if (phase === 'responded' && serverAddr === '') {
     content =
-      <div style={{ display: 'table', position: 'absolute', top: 0, left: 0, height: '100%', width: '100%' }}>
-        <div style={{ display: 'table-cell', verticalAlign: 'middle' }}>
-          <div style={{ marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
-            <Grid container justify="center" alignItems="center">
-              <Typography variant="h3" color="error">
-                매칭이 실패했습니다.<br />
-                다시 시도해 주세요.
-              </Typography>
-            </Grid>
-          </div>
-        </div>
+      <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+        <Grid container justify="center" alignItems="center">
+          <Typography variant="h3" color="error">
+            매칭이 실패했습니다.<br />
+            다시 시도해 주세요.
+          </Typography>
+        </Grid>
       </div >
   } else {
     content =
@@ -159,8 +152,8 @@ function SimpleDialog(props: SimpleDialogProps) {
         // url={`http://localhost:8080/?hostname=${serverAddr.replace(':', '%3A')}`}
         url={`${env.CLIENT_URL}/?hostname=${serverAddr.replace(':', '%3A')}`}
         // styles={{ width: '100%', height: '100%' }}
-        width={'100%'}
-        height={'100%'}
+        width='100%'
+        height='100%'
         frameBorder={0}
         scrolling="no"
       />
@@ -174,11 +167,13 @@ function SimpleDialog(props: SimpleDialogProps) {
       disableEscapeKeyDown={true}
       open={open}
       fullWidth={true}
-      maxWidth='md'
+      maxWidth='lg'
     >
       <DialogTitle id="simple-dialog-title" onClose={handleClose} >Tic Tac Toe {serverAddr}</DialogTitle>
-      <Box height="85vh" bgcolor="text.primary" position='relative'>
-        {content}
+      <Box height='90vh' bgcolor="text.primary" position='relative'>
+        <div style={{ height: '100%' }}>
+          {content}
+        </div>
       </Box>
     </Dialog>
   );

@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme, Typography, useTheme } from '@material-ui/core';
+import { createStyles, makeStyles, Theme, Typography, useTheme, Grid } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -113,6 +113,11 @@ const useStyles = makeStyles((theme: Theme) =>
     tableWrapper: {
       overflowX: 'auto',
     },
+    paper: {
+      maxWidth: 400,
+      margin: `${theme.spacing(1)}px auto`,
+      padding: theme.spacing(2),
+    },
   }),
 );
 
@@ -123,85 +128,30 @@ interface Props {
 
 function GamePage({ username, users }: Props) {
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const rows = users.sort((a, b) => b.score - a.score);
-  // const rows: UserStore[] = [];
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-  
-
-  function handleChangePage(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
-    newPage: number,
-  ) {
-    setPage(newPage);
-  }
-
-  function handleChangeRowsPerPage(
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  }
 
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
 
 
-      <Paper className={classes.accountPaper}>
+      <Paper className={classes.paper}>
+
         <Typography variant="h5" component="h3">
           유저 정보
         </Typography>
         <Typography component="p">
           ID: {username}
         </Typography>
-        <Typography component="p">
+        {/* <Typography component="p">
           Score: {1000}
-        </Typography>
-        <GameModal />
+        </Typography> */}
       </Paper>
 
-      <Paper className={classes.tablePaper}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
-                <TableRow key={row.username}>
-                  <TableCell component="th" scope="row">
-                    {row.username}
-                  </TableCell>
-                  <TableCell align="center">{row.score}</TableCell>
-                </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: { 'aria-label': 'rows per page' },
-                    native: true,
-                  }}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
+      <Paper className={classes.paper}>
+        <Grid>
+          <GameModal />
+        </Grid>
       </Paper>
-
     </main>
   );
 }

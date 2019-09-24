@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default withRouter(function MainMenu(props: any) {
   const classes = useStyles();
   const theme = useTheme();
-  const [drawerOpen, setDrawerOpen] = React.useState(true);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const accountOpen = Boolean(anchorEl);
   const { history, auth, userCount, serverCount } = props;
@@ -141,38 +141,7 @@ export default withRouter(function MainMenu(props: any) {
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
             틱택토 통합 대시보드
-          </Typography>
-          {/* {auth && (
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={accountOpen}
-                onClose={handleAccountClose}
-              >
-                <MenuItem onClick={handleAccountClose}>Profile</MenuItem>
-                <MenuItem onClick={handleAccountClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )} */}
+          </Typography>          
         </Toolbar>
       </AppBar>
       <Drawer
