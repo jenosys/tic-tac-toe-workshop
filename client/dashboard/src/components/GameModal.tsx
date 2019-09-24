@@ -170,10 +170,8 @@ function SimpleDialog(props: SimpleDialogProps) {
       maxWidth='lg'
     >
       <DialogTitle id="simple-dialog-title" onClose={handleClose} >Tic Tac Toe {serverAddr}</DialogTitle>
-      <Box height='90vh' bgcolor="text.primary" position='relative'>
-        <div style={{ height: '100%' }}>
+      <Box height={window.innerHeight * 0.7} bgcolor="text.primary" position='relative'>
           {content}
-        </div>
       </Box>
     </Dialog>
   );
