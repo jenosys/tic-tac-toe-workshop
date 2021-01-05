@@ -15,7 +15,7 @@
   "dependencies": {
     "@types/express": "^4.17.0",
     "aws-sdk": "^2.505.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "capture-exit": "^2.0.0",
     "colyseus": "^0.9.3",
     "cors": "^2.8.5",
