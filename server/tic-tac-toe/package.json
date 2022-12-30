@@ -17,7 +17,7 @@
     "aws-sdk": "^2.505.0",
     "axios": "^0.19.0",
     "capture-exit": "^2.0.0",
-    "colyseus": "^0.9.3",
+    "colyseus": "^0.14.24",
     "cors": "^2.8.5",
     "express": "^4.13.4",
     "nocache": "^2.1.0"
